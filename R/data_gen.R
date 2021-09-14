@@ -18,6 +18,7 @@
 #' parameter Lambda and Sigma.
 #' 
 #' @importFrom stats rnorm rchisq
+#' @importFrom MASS mvrnorm
 #' 
 #' @export   
 #' @examples
@@ -38,25 +39,25 @@ data_gen <- function(n, p, centers, mu, sigma, labels, size, hpara_func) {
 
   Alpha_list <- lapply(sample_data, function(x) x[["Alpha"]])
   X_list <- lapply(sample_data, function(x) x[["X"]])
-  PLambda_list <- lapply(sample_data, function(x) x[["PLambda"]])
-  PSigma_list <- lapply(sample_data, function(x) x[["PSigma"]])
+  HLambda_list <- lapply(sample_data, function(x) x[["HLambda"]])
+  HSigma_list <- lapply(sample_data, function(x) x[["HSigma"]])
 
-  list(Alpha_list = Alpha_list, X_list = X_list, PLambda_list = PLambda_list, PSigma_list = PSigma_list)
+  list(Alpha_list = Alpha_list, X_list = X_list, HLambda_list = HLambda_list, HSigma_list = HSigma_list)
 }
 
 # Helper function
 sample_gen <- function(n, p, mu, sigma, labels, hpara_func) {
-  PLambda <- (hpara_func$lambda_func)(p)
-  PSigma <- (hpara_func$sigma_func)(p)
+  HLambda <- (hpara_func$lambda_func)(p)
+  HSigma <- (hpara_func$sigma_func)(p)
   
   Alpha <- MASS::mvrnorm(n, mu, sigma)
   X <- matrix(rep(0, n * p), nrow = n)
   for (i in 1:n) {
     for (j in 1:p) {
-      X[i, j] <- PLambda[j] * (Alpha[i, labels[j]]) + PSigma[j] * rnorm(1, 0, 1)
+      X[i, j] <- HLambda[j] * (Alpha[i, labels[j]]) + HSigma[j] * rnorm(1, 0, 1)
     }
   }
-  list(Alpha = Alpha, X = X, PLambda = PLambda, PSigma = PSigma)
+  list(Alpha = Alpha, X = X, HLambda = HLambda, HSigma = HSigma)
 }
 
 
