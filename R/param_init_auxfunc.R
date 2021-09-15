@@ -1,5 +1,5 @@
 #' @rdname param_init
-obj_init_alpha <- function(X, hlambda, hsigma) {
+obj_init_qalpha <- function(X, hlambda, hsigma) {
   n <- nrow(X)
   p <- ncol(X)
 
@@ -19,19 +19,19 @@ obj_init_alpha <- function(X, hlambda, hsigma) {
 }
 
 #' @rdname param_init
-obj_alpha_logL <- function(X, alpha, hlambda, hsigma) {
+obj_qalpha_logL <- function(X, qalpha, hlambda, hsigma) {
   n <- nrow(X)
   p <- ncol(X)
 
-  # given alpha, entropy of alpha is constant
-  entropy_alpha <- -n / 2 * log(2 * pi) - n / 2 * log(alpha$alpha_cov) - n / 2
+  # given qalpha, entropy of alpha is constant
+  entropy_alpha <- -n / 2 * log(2 * pi) - n / 2 * log(qalpha$alpha_cov) - n / 2
 
   logL <- -(n / 2) * log(2 * pi) - n / 2 * log(1) +
-    -1 / 2 * 1 * sum(alpha$alpha_mu_inter) +
+    -1 / 2 * 1 * sum(qalpha$alpha_mu_inter) +
     -n / 2 * sum(log(2 * pi * (hsigma^2))) +
     -1 / 2 * sum((X^2) %*% diag(1 / (hsigma^2))) +
-    -1 / 2 * sum(alpha$alpha_mu_inter) * sum(hlambda^2 / hsigma^2) +
-    sum(diag(c(alpha$alpha_mu)) %*% X %*% diag(hlambda / hsigma^2)) +
+    -1 / 2 * sum(qalpha$alpha_mu_inter) * sum(hlambda^2 / hsigma^2) +
+    sum(diag(c(qalpha$alpha_mu)) %*% X %*% diag(hlambda / hsigma^2)) +
     -entropy_alpha
 
   # return -logL
@@ -39,23 +39,23 @@ obj_alpha_logL <- function(X, alpha, hlambda, hsigma) {
 }
 
 #' @rdname param_init
-obj_init_hlambda <- function(X, alpha) {
+obj_init_hlambda <- function(X, qalpha) {
   n <- nrow(X)
   p <- ncol(X)
 
   # return
-  colSums(diag(c(alpha$alpha_mu)) %*% X) / sum(alpha$alpha_mu_inter)
+  colSums(diag(c(qalpha$alpha_mu)) %*% X) / sum(qalpha$alpha_mu_inter)
 }
 
 #' @rdname param_init
-obj_init_hsigma <- function(X, alpha, hlambda) {
+obj_init_hsigma <- function(X, qalpha, hlambda) {
   n <- nrow(X)
   p <- ncol(X)
 
   # return
   sqrt(1 / n * (colSums(X^2) +
-    hlambda^2 * sum(alpha$alpha_mu_inter) +
-    -2 * colSums(diag(c(alpha$alpha_mu)) %*% X %*% diag(hlambda))))
+    hlambda^2 * sum(qalpha$alpha_mu_inter) +
+    -2 * colSums(diag(c(qalpha$alpha_mu)) %*% X %*% diag(hlambda))))
 }
 
 #' @description

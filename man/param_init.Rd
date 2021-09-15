@@ -3,8 +3,8 @@
 \name{init_hparam}
 \alias{init_hparam}
 \alias{init_hparam0}
-\alias{obj_init_alpha}
-\alias{obj_alpha_logL}
+\alias{obj_init_qalpha}
+\alias{obj_qalpha_logL}
 \alias{obj_init_hlambda}
 \alias{obj_init_hsigma}
 \alias{init_sigma}
@@ -14,13 +14,13 @@ init_hparam(X, centers, labels, tol, iter, verbose = FALSE)
 
 init_hparam0(X, tol, iter, verbose = FALSE)
 
-obj_init_alpha(X, hlambda, hsigma)
+obj_init_qalpha(X, hlambda, hsigma)
 
-obj_alpha_logL(X, alpha, hlambda, hsigma)
+obj_qalpha_logL(X, qalpha, hlambda, hsigma)
 
-obj_init_hlambda(X, alpha)
+obj_init_hlambda(X, qalpha)
 
-obj_init_hsigma(X, alpha, hlambda)
+obj_init_hsigma(X, qalpha, hlambda)
 
 init_sigma(X, centers, labels, hlambda, hsigma)
 }
@@ -36,6 +36,12 @@ init_sigma(X, centers, labels, hlambda, hsigma)
 \item{iter}{number of iterations.}
 
 \item{verbose}{if TRUE, print parameters estimation on each iteration.}
+
+\item{hlambda}{estimated heterogeneous parameter Lambda.}
+
+\item{hsigma}{estimated heterogeneous parameter Sigma.}
+
+\item{qalpha}{estimated distribution of parameter alpha.}
 }
 \value{
 A list containing a vector of Lambda estimations and a vector of Sigma estimations

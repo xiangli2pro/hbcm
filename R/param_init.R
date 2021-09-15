@@ -11,6 +11,9 @@
 #' @param tol numerical tolerance of the iteration updates.
 #' @param iter number of iterations.
 #' @param verbose if TRUE, print parameters estimation on each iteration.
+#' @param hlambda estimated heterogeneous parameter Lambda.
+#' @param hsigma estimated heterogeneous parameter Sigma.
+#' @param qalpha estimated distribution of parameter alpha.
 #'
 #' @importFrom RSpectra eigs_sym
 #'
@@ -75,7 +78,7 @@ init_hparam0 <- function(X, tol, iter, verbose = FALSE) {
   hsigma[hsigma < 0] <- 0
   hsigma <- sqrt(hsigma)
 
-  # minimum of logL after each iteraction sub-step (alpha, hsigma, hlambda)
+  # minimum of logL after each iteraction sub-step (qalpha, hsigma, hlambda)
   min_val <- Inf
   # logL after each iteration
   obj_val <- vector()
@@ -85,51 +88,24 @@ init_hparam0 <- function(X, tol, iter, verbose = FALSE) {
   while (iiter <= iter) {
 
     # update alpha
-    alpha_new <- obj_init_alpha(X, hlambda, hsigma) 
+    qalpha_new <- obj_init_qalpha(X, hlambda, hsigma) 
     
-    if (verbose == TRUE) {
-      
-      obj_val_new <- obj_alpha_logL(X, alpha_new, hlambda, hsigma) 
-      
-      if (obj_val_new <= min_val) {
-        min_val <- obj_val_new
-        cat(paste0("Update alpha  ", obj_val_new, " --"), "\n")
-      } else {
-        cat(paste0("Update alpha  ", obj_val_new, " ++"), "\n")
-      }
-    }
+    min_val <- verbose_print_alpha(verbose, "alpha", min_val,
+                                   X, qalpha_new, hlambda, hsigma)
 
     # update hlambda
-    hlambda_new <- obj_init_hlambda(X, alpha_new) 
+    hlambda_new <- obj_init_hlambda(X, qalpha_new) 
 
-    if (verbose == TRUE) {
-      
-      obj_value_new <- obj_alpha_logL(X, alpha_new, hlambda_new, hsigma)
-
-      if (obj_value_new <= min_val) {
-        min_val <- obj_value_new
-        cat(paste0("Update hlambda  ", obj_value_new, " --"), "\n")
-      } else {
-        cat(paste0("Update hlambda  ", obj_value_new, " ++"), "\n")
-      }
-    }
+    min_val <- verbose_print_alpha(verbose, "hlambda", min_val,
+                                   X, qalpha_new, hlambda_new, hsigma)
 
     # update hsigma
-    hsigma_new <- obj_init_hsigma(X, alpha_new, hlambda_new) 
+    hsigma_new <- obj_init_hsigma(X, qalpha_new, hlambda_new) 
 
-    obj_value_new <- obj_alpha_logL(X, alpha_new, hlambda_new, hsigma_new)
+    min_val <- verbose_print_alpha(verbose, "hsigma", min_val,
+                                   X, qalpha_new, hlambda_new, hsigma_new)
 
-    if (verbose == TRUE) {
-      
-      if (obj_value_new <= min_val) {
-        min_val <- obj_value_new
-        cat(paste0("Update hsigma  ", obj_value_new, " --"), "\n")
-      } else {
-        cat(paste0("Update hsigma  ", obj_value_new, " ++"), "\n")
-      }
-    }
-
-    obj_val[iiter + 1] <- obj_value_new
+    obj_val[iiter + 1] <- obj_qalpha_logL(X, qalpha_new, hlambda_new, hsigma_new)
     if (abs(obj_val[iiter + 1] - obj_val[iiter]) < tol) break
 
     # Continue update
@@ -144,9 +120,35 @@ init_hparam0 <- function(X, tol, iter, verbose = FALSE) {
 
 
 # Helper functions ---------------------------------------------------------------
+
 ## calculate the number of pairs that hlambda and hsigma have the same sign
 hparam_sign <- function(x, y) {
   sum((x > 0) & (y > 0)) + sum((x < 0) & (y < 0))
 }
+
+## print iteration info
+verbose_print_alpha <- function(verbose, param_name, min_val,
+                                X, qalpha, hlambda, hsigma){
+  
+  if (verbose == TRUE) {
+    
+    obj_val_new <- obj_qalpha_logL(X, qalpha, hlambda, hsigma) 
+    
+    if (obj_val_new <= min_val) {
+      
+      min_val <- obj_val_new
+      cat(paste0("Update ", param_name, " : ", obj_val_new, " --"), "\n")
+    } else {
+      cat(paste0("Update ", param_name, " : ", obj_val_new, " ++"), "\n")
+    }
+  }
+  
+  # return 
+  min_val
+}
+
+
+
+
 
 
