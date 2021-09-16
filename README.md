@@ -20,8 +20,7 @@ install the development version from [GitHub](https://github.com/) with:
 devtools::install_github("xiangli2pro/hbcm")
 
 # load package
-load('hbcm')
-load('dplyr')
+library('hbcm')
 ```
 
 ## Examples
@@ -91,7 +90,7 @@ system.time(
 start_labels <- kernlab::specc(abs(cor(x)), centers = 3)@.Data
 )
 #>    user  system elapsed 
-#>   4.064   0.065   4.148
+#>   4.157   0.082   4.275
 
 # use hbcm to perform clustering
 system.time(
@@ -101,7 +100,7 @@ system.time(
                   verbose = FALSE)
 )
 #>    user  system elapsed 
-#>   2.833   0.036   2.875
+#>   2.702   0.059   2.892
 ```
 
 3.  Use metric [Rand-Index](https://en.wikipedia.org/wiki/Rand_index)
@@ -129,8 +128,8 @@ hbcm_eval <- hbcm::matchLabel(labels, hbcm_labels) %>%
 
 print(specc_eval)
 #>    Rand adjRand 
-#>   0.421   0.047
+#>   0.526   0.075
 print(hbcm_eval)
 #>    Rand adjRand 
-#>   0.570   0.219
+#>   0.788   0.527
 ```
