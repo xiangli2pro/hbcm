@@ -10,16 +10,6 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// rcpp_hello_world
-List rcpp_hello_world();
-RcppExport SEXP _hbcm_rcpp_hello_world() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello_world());
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcpp_qalpha_mu_inter
 List rcpp_qalpha_mu_inter(int n, int p, int centers, NumericMatrix alpha_mu, NumericMatrix alpha_cov);
 RcppExport SEXP _hbcm_rcpp_qalpha_mu_inter(SEXP nSEXP, SEXP pSEXP, SEXP centersSEXP, SEXP alpha_muSEXP, SEXP alpha_covSEXP) {
@@ -56,7 +46,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_hbcm_rcpp_hello_world", (DL_FUNC) &_hbcm_rcpp_hello_world, 0},
     {"_hbcm_rcpp_qalpha_mu_inter", (DL_FUNC) &_hbcm_rcpp_qalpha_mu_inter, 5},
     {"_hbcm_rcpp_qc", (DL_FUNC) &_hbcm_rcpp_qc, 9},
     {NULL, NULL, 0}

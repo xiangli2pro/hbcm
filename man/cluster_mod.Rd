@@ -11,26 +11,26 @@
 \alias{obj_logL}
 \title{Estimate the optimal posterior distribution of the data column labels.}
 \usage{
-heterogbcm(X, centers, tol, iter, iter_init = 3, labels, verbose = FALSE)
+heterogbcm(x, centers, tol, iter, iter_init = 3, labels, verbose = FALSE)
 
-obj_qc(X, centers, ppi, sigma, qalpha, hlambda, hsigma)
+obj_qc(x, centers, ppi, sigma, qalpha, hlambda, hsigma)
 
-obj_qalpha(X, centers, sigma, qc, hlambda, hsigma)
+obj_qalpha(x, centers, sigma, qc, hlambda, hsigma)
 
 obj_ppi(centers, qc)
 
 obj_sigma(centers, qalpha)
 
-obj_hlambda(X, centers, qc, qalpha)
+obj_hlambda(x, centers, qc, qalpha)
 
-obj_hsigma(X, centers, qc, qalpha, hlambda)
+obj_hsigma(x, centers, qc, qalpha, hlambda)
 
-obj_logL(X, centers, ppi, sigma, qc, qalpha, hlambda, hsigma)
+obj_logL(x, centers, ppi, sigma, qc, qalpha, hlambda, hsigma)
 }
 \arguments{
-\item{X}{matrix data.}
+\item{x}{a numeric matrix data.}
 
-\item{centers}{An integer specifying the number of clusters.}
+\item{centers}{an integer specifying the number of clusters.}
 
 \item{tol}{numerical tolerance of the iteration updates.}
 
@@ -38,7 +38,7 @@ obj_logL(X, centers, ppi, sigma, qc, qalpha, hlambda, hsigma)
 
 \item{iter_init}{number of iterations of parameters initial estimation, default is 3.}
 
-\item{labels}{A vector specifying the cluster labels of the columns of X.}
+\item{labels}{a vector specifying the cluster labels of the columns of x.}
 
 \item{verbose}{if TRUE, print iteration information.}
 

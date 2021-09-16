@@ -7,34 +7,34 @@
 data_gen(n, p, centers, mu, sigma, labels, size, hparam_func)
 }
 \arguments{
-\item{n}{An integer specifying the number of observations (rows) of data X.}
+\item{n}{an integer specifying the number of observations (rows) of data x.}
 
-\item{p}{An integer specifying the number of variables (columns) of data X.}
+\item{p}{an integer specifying the number of variables (columns) of data x.}
 
-\item{centers}{An integer specifying the number of clusters.}
+\item{centers}{an integer specifying the number of clusters.}
 
-\item{mu}{A vector of size `centers` specifying the mean vector of the 
+\item{mu}{a vector of size `centers` specifying the mean vector of the 
 multivariate normal distribution of alpha.}
 
-\item{sigma}{A matrix of size `centers x centers` specifying the covariance matrix of the
+\item{sigma}{a matrix of size `centers x centers` specifying the covariance matrix of the
 multivariate normal distribution of alpha.}
 
-\item{labels}{A vector of size `p` specifying the cluster labels of the variables.}
+\item{labels}{a vector of size `p` specifying the cluster labels of the variables.}
 
-\item{size}{An integer specifying the number of simulation data sets.}
+\item{size}{an integer specifying the number of simulation data sets.}
 
-\item{hparam_func}{A list of size two specifying the function of generating random numbers of
+\item{hparam_func}{a list of size two specifying the function of generating random numbers of
 parameter Lambda and Sigma.}
 }
 \value{
 A list of lists.
-\item{X_list}{A list of data X.}
-\item{alpha_list}{A list of alpha.}
-\item{hlambda_list}{A list of Lambda.}
-\item{hsigma_list}{A list of Sigma.}
+\item{x_list}{a list of data x.}
+\item{alpha_list}{a list of alpha.}
+\item{hlambda_list}{a list of Lambda.}
+\item{hsigma_list}{a list of Sigma.}
 }
 \description{
-`data_gen( )` generates simulation data X and parameters (alpha, Lambda, Sigma) for experimenting
+`data_gen( )` generates matrix data (x) and parameters (alpha, Lambda, Sigma) for experimenting
 with the HBCM model.
 }
 \examples{

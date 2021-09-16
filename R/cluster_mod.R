@@ -13,9 +13,9 @@
 #'
 #' @rdname cluster_mod
 #'
-#' @param X matrix data.
-#' @param centers An integer specifying the number of clusters.
-#' @param labels A vector specifying the cluster labels of the columns of X.
+#' @param x a numeric matrix data.
+#' @param centers an integer specifying the number of clusters.
+#' @param labels a vector specifying the cluster labels of the columns of x.
 #' @param tol numerical tolerance of the iteration updates.
 #' @param iter number of iterations.
 #' @param iter_init number of iterations of parameters initial estimation, default is 3.
@@ -28,12 +28,12 @@
 #' @param qc posterior distribution of labels.
 #'
 #' @export
-heterogbcm <- function(X, centers, tol, iter, iter_init = 3, labels, verbose = FALSE) {
-  n <- nrow(X)
-  p <- ncol(X)
+heterogbcm <- function(x, centers, tol, iter, iter_init = 3, labels, verbose = FALSE) {
+  n <- nrow(x)
+  p <- ncol(x)
 
   # initial values of hlambda and hsigma
-  init_hparameters <- init_hparam(X, centers, labels, tol, iter_init, verbose)
+  init_hparameters <- init_hparam(x, centers, labels, tol, iter_init, verbose)
   hlambda <- init_hparameters$hlambda
   hsigma <- init_hparameters$hsigma
 
@@ -47,23 +47,23 @@ heterogbcm <- function(X, centers, tol, iter, iter_init = 3, labels, verbose = F
   } else {
 
     # initial estimate of group-correlation matrix sigma
-    sigma <- init_sigma(X, centers, labels, hlambda, hsigma)
+    sigma <- init_sigma(x, centers, labels, hlambda, hsigma)
     # initial estimate of the probablity of the multi-nulli distribution
     ppi <- table(labels) / p
     # initial distribution of c based on ppi
-    qc0 <- sapply(labels, function(x) x == c(1:centers)) * 1
+    qc0 <- sapply(labels, function(grp) grp == c(1:centers)) * 1
   }
 
   # initial distribution of alpha based on sigma, qc0, hlambda, hsigma
-  qalpha <- obj_qalpha(X, centers, sigma, qc0, hlambda, hsigma)
+  qalpha <- obj_qalpha(x, centers, sigma, qc0, hlambda, hsigma)
 
   # initial distribution of c based on sigma, qalpha
-  qc <- obj_qc(X, centers, ppi, sigma, qalpha, hlambda, hsigma)
+  qc <- obj_qc(x, centers, ppi, sigma, qalpha, hlambda, hsigma)
 
   # initial -logL
   obj_logL_val <- vector()
   obj_logL_val[1] <- obj_logL(
-    X, centers, ppi, sigma,
+    x, centers, ppi, sigma,
     qc, qalpha,
     hlambda, hsigma
   )
@@ -78,7 +78,7 @@ heterogbcm <- function(X, centers, tol, iter, iter_init = 3, labels, verbose = F
 
     min_val <- verbose_print(
       verbose, "ppi", min_val,
-      X, centers, ppi_new, sigma,
+      x, centers, ppi_new, sigma,
       qc, qalpha,
       hlambda, hsigma
     )
@@ -89,39 +89,39 @@ heterogbcm <- function(X, centers, tol, iter, iter_init = 3, labels, verbose = F
 
     min_val <- verbose_print(
       verbose, "sigma", min_val,
-      X, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, sigma_new,
       qc, qalpha,
       hlambda, hsigma
     )
 
 
     # update hlambda
-    hlambda_new <- obj_hlambda(X, centers, qc, qalpha)
+    hlambda_new <- obj_hlambda(x, centers, qc, qalpha)
 
     min_val <- verbose_print(
       verbose, "hlambda", min_val,
-      X, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, sigma_new,
       qc, qalpha,
       hlambda_new, hsigma
     )
 
 
     # update hsigma
-    hsigma_new <- obj_hsigma(X, centers, qc, qalpha, hlambda_new)
+    hsigma_new <- obj_hsigma(x, centers, qc, qalpha, hlambda_new)
 
     min_val <- verbose_print(
       verbose, "hsigma", min_val,
-      X, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, sigma_new,
       qc, qalpha,
       hlambda_new, hsigma_new
     )
 
     # update qalpha
-    qalpha_new <- obj_qalpha(X, centers, sigma_new, qc, hlambda_new, hsigma_new)
+    qalpha_new <- obj_qalpha(x, centers, sigma_new, qc, hlambda_new, hsigma_new)
 
     min_val <- verbose_print(
       verbose, "qalpha", min_val,
-      X, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, sigma_new,
       qc, qalpha_new,
       hlambda_new, hsigma_new
     )
@@ -129,19 +129,19 @@ heterogbcm <- function(X, centers, tol, iter, iter_init = 3, labels, verbose = F
 
     # update qc
     qc_new <- obj_qc(
-      X, centers, ppi_new, sigma_new, qalpha_new,
+      x, centers, ppi_new, sigma_new, qalpha_new,
       hlambda_new, hsigma_new
     )
 
     min_val <- verbose_print(
       verbose, "qc", min_val,
-      X, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, sigma_new,
       qc_new, qalpha_new,
       hlambda_new, hsigma_new
     )
 
     obj_logL_val[iiter + 1] <- obj_logL(
-      X, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, sigma_new,
       qc_new, qalpha_new,
       hlambda_new, hsigma_new
     )
@@ -169,10 +169,10 @@ heterogbcm <- function(X, centers, tol, iter, iter_init = 3, labels, verbose = F
 
 ## print iteration info
 verbose_print <- function(verbose, param_name, min_val,
-                          X, centers, ppi, sigma, qc, qalpha, hlambda, hsigma) {
+                          x, centers, ppi, sigma, qc, qalpha, hlambda, hsigma) {
   if (verbose == TRUE) {
     obj_logL_val_new <- obj_logL(
-      X, centers, ppi, sigma,
+      x, centers, ppi, sigma,
       qc, qalpha,
       hlambda, hsigma
     )

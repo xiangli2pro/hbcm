@@ -13,10 +13,10 @@ Imports:
     MASS,
     Matrix,
     Rcpp,
-    RSpectra
+    RSpectra,
+    stats
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
 Suggests: 
-    stats,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

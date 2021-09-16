@@ -10,26 +10,26 @@
 \alias{obj_init_hsigma}
 \title{Initial estimation of heterogeneous parameters Lambda and Sigma}
 \usage{
-init_hparam(X, centers, labels, tol, iter, verbose = FALSE)
+init_hparam(x, centers, labels, tol, iter, verbose = FALSE)
 
-init_hparam0(X, tol, iter, verbose = FALSE)
+init_hparam0(x, tol, iter, verbose = FALSE)
 
-init_sigma(X, centers, labels, hlambda, hsigma)
+init_sigma(x, centers, labels, hlambda, hsigma)
 
-obj_init_qalpha(X, hlambda, hsigma)
+obj_init_qalpha(x, hlambda, hsigma)
 
-obj_qalpha_logL(X, qalpha, hlambda, hsigma)
+obj_qalpha_logL(x, qalpha, hlambda, hsigma)
 
-obj_init_hlambda(X, qalpha)
+obj_init_hlambda(x, qalpha)
 
-obj_init_hsigma(X, qalpha, hlambda)
+obj_init_hsigma(x, qalpha, hlambda)
 }
 \arguments{
-\item{X}{matrix data.}
+\item{x}{a numeric matrix data.}
 
-\item{centers}{An integer specifying the number of clusters.}
+\item{centers}{an integer specifying the number of clusters.}
 
-\item{labels}{A vector specifying the cluster labels of the columns of X.}
+\item{labels}{a vector specifying the cluster labels of the columns of x.}
 
 \item{tol}{numerical tolerance of the iteration updates.}
 

@@ -1,20 +1,20 @@
 #' @rdname cluster_mod
-obj_qc <- function(X, centers, ppi, sigma, qalpha, hlambda, hsigma) {
-  n <- nrow(X)
-  p <- ncol(X)
+obj_qc <- function(x, centers, ppi, sigma, qalpha, hlambda, hsigma) {
+  n <- nrow(x)
+  p <- ncol(x)
 
   if (centers == 1) {
     qc <- rep(1, p)
   } else {
-    n <- nrow(X)
-    p <- ncol(X)
+    n <- nrow(x)
+    p <- ncol(x)
 
     qc0 <- rcpp_qc(
       n, p, centers, ppi,
       hsigma, hlambda,
-      qalpha$alpha_mu, X, qalpha$alpha_mu_inter
+      qalpha$alpha_mu, x, qalpha$alpha_mu_inter
     )
-    qc0 <- exp(apply(qc0, 2, function(x) x - max(x)))
+    qc0 <- exp(apply(qc0, 2, function(qc_col) qc_col - max(qc_col)))
 
     # normalize to be multi-nulli distribution
     qc <- t(t(qc0) / colSums(qc0))
@@ -25,20 +25,20 @@ obj_qc <- function(X, centers, ppi, sigma, qalpha, hlambda, hsigma) {
 }
 
 #' @rdname cluster_mod
-obj_qalpha <- function(X, centers, sigma, qc, hlambda, hsigma) {
-  n <- nrow(X)
-  p <- ncol(X)
+obj_qalpha <- function(x, centers, sigma, qc, hlambda, hsigma) {
+  n <- nrow(x)
+  p <- ncol(x)
 
   if (centers == 1) {
     dsum_j <- qc %*% (hlambda^2 / hsigma^2)
-    dbsumi_j <- qc %*% t(X %*% diag((hlambda / hsigma^2)))
+    dbsumi_j <- qc %*% t(x %*% diag((hlambda / hsigma^2)))
 
     alpha_cov <- 1 / (1 + dsum_j)
     alpha_mu <- t(alpha_cov %*% dbsumi_j)
-    alpha_mu_inter <- lapply(as.list(alpha_mu), function(x) x^2 + alpha_cov)
+    alpha_mu_inter <- lapply(as.list(alpha_mu), function(mu) mu^2 + alpha_cov)
   } else {
     dsum_j <- diag(c(qc %*% (hlambda^2 / hsigma^2)))
-    dbsumi_j <- qc %*% t(X %*% diag((hlambda / hsigma^2)))
+    dbsumi_j <- qc %*% t(x %*% diag((hlambda / hsigma^2)))
 
     alpha_cov <- Matrix::solve(Matrix::solve(sigma) + dsum_j) # covariance is the same for all i
     alpha_mu <- t(alpha_cov %*% dbsumi_j)
@@ -74,18 +74,18 @@ obj_sigma <- function(centers, qalpha) {
 }
 
 #' @rdname cluster_mod
-obj_hlambda <- function(X, centers, qc, qalpha) {
-  n <- nrow(X)
-  p <- ncol(X)
+obj_hlambda <- function(x, centers, qc, qalpha) {
+  n <- nrow(x)
+  p <- ncol(x)
 
   if (centers == 1) {
     alpha_mu_inter <- unlist(qalpha$alpha_mu_inter)
 
-    hlambda <- colSums(diag(c(qalpha$alpha_mu)) %*% X) / sum(alpha_mu_inter)
+    hlambda <- colSums(diag(c(qalpha$alpha_mu)) %*% x) / sum(alpha_mu_inter)
   } else {
-    alpha_mu_inter <- t(sapply(qalpha$alpha_mu_inter, function(x) diag(x)))
+    alpha_mu_inter <- t(sapply(qalpha$alpha_mu_inter, function(mu_inter) diag(mu_inter)))
 
-    hlambda <- colSums(X * (qalpha$alpha_mu %*% qc)) / colSums(alpha_mu_inter %*% qc)
+    hlambda <- colSums(x * (qalpha$alpha_mu %*% qc)) / colSums(alpha_mu_inter %*% qc)
   }
 
   # return
@@ -93,18 +93,18 @@ obj_hlambda <- function(X, centers, qc, qalpha) {
 }
 
 #' @rdname cluster_mod
-obj_hsigma <- function(X, centers, qc, qalpha, hlambda) {
-  n <- nrow(X)
-  p <- ncol(X)
+obj_hsigma <- function(x, centers, qc, qalpha, hlambda) {
+  n <- nrow(x)
+  p <- ncol(x)
 
   if (centers == 1) {
     alpha_mu_inter <- unlist(qalpha$alpha_mu_inter)
-    hsigma <- sqrt(1 / n * (colSums(X^2) + hlambda^2 * rep(sum(alpha_mu_inter), p) +
-      -2 * hlambda * colSums(diag(c(qalpha$alpha_mu)) %*% X)))
+    hsigma <- sqrt(1 / n * (colSums(x^2) + hlambda^2 * rep(sum(alpha_mu_inter), p) +
+      -2 * hlambda * colSums(diag(c(qalpha$alpha_mu)) %*% x)))
   } else {
-    alpha_mu_inter <- t(sapply(qalpha$alpha_mu_inter, function(x) diag(x)))
-    hsigma <- sqrt(1 / n * (colSums(X^2) + hlambda^2 * colSums(alpha_mu_inter %*% qc) +
-      -2 * hlambda * colSums(X * (qalpha$alpha_mu %*% qc))))
+    alpha_mu_inter <- t(sapply(qalpha$alpha_mu_inter, function(mu_inter) diag(mu_inter)))
+    hsigma <- sqrt(1 / n * (colSums(x^2) + hlambda^2 * colSums(alpha_mu_inter %*% qc) +
+      -2 * hlambda * colSums(x * (qalpha$alpha_mu %*% qc))))
   }
 
   # return
