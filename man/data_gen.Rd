@@ -4,7 +4,7 @@
 \alias{data_gen}
 \title{Generate simulation data and parameters}
 \usage{
-data_gen(n, p, centers, mu, sigma, labels, size, hpara_func)
+data_gen(n, p, centers, mu, sigma, labels, size, hparam_func)
 }
 \arguments{
 \item{n}{An integer specifying the number of observations (rows) of data X.}
@@ -13,36 +13,54 @@ data_gen(n, p, centers, mu, sigma, labels, size, hpara_func)
 
 \item{centers}{An integer specifying the number of clusters.}
 
-\item{mu}{A vector of size `p` specifying the mean of the multivariate normal distribution of Alpha.}
+\item{mu}{A vector of size `centers` specifying the mean vector of the 
+multivariate normal distribution of alpha.}
 
-\item{sigma}{A matrix of size `p x p` specifying the variance matrix of the 
-multivariate normal distribution of Alpha.}
+\item{sigma}{A matrix of size `centers x centers` specifying the covariance matrix of the
+multivariate normal distribution of alpha.}
 
 \item{labels}{A vector of size `p` specifying the cluster labels of the variables.}
 
-\item{size}{An integer specifying the number of simulated data sets.}
+\item{size}{An integer specifying the number of simulation data sets.}
 
-\item{hpara_func}{A list of size 2 specifying the function of generating random numbers for
+\item{hparam_func}{A list of size two specifying the function of generating random numbers of
 parameter Lambda and Sigma.}
 }
 \value{
-A list of lists, each sub-list contains a set of data X, parameter Alpha, Lambda 
-and Sigma.
+A list of lists.
+\item{X_list}{A list of data X.}
+\item{alpha_list}{A list of alpha.}
+\item{hlambda_list}{A list of Lambda.}
+\item{hsigma_list}{A list of Sigma.}
 }
 \description{
-`data_gen( )` generates simulation data and parameters for implementation HBCM model
+`data_gen( )` generates simulation data X and parameters (alpha, Lambda, Sigma) for experimenting
+with the HBCM model.
 }
 \examples{
-n <- 100
-p <- 2
-centers <- 2
-mu <- rep(0, p)
-sigma <- matrix(c(1,0,0,1), nrow=p)
-labels <- c(1,2)
+n <- 500
+p <- 500
+centers <- 3
+
+mu <- rep(0, centers)
+
+off_diag <- 0.5
+sigma <- diag(rep(1, centers))
+for (i in 1:centers) {
+ for (j in 1:centers) {
+   if (i!=j){
+     sigma[i,j] = off_diag
+   } 
+ }
+}
+
+ppi <- rep(1/centers, centers)
+labels <- sample(c(1:centers), size = p, replace = TRUE, prob = ppi) 
+
 size <- 5
-hpara_func <- list(
+hparam_func <- list(
   lambda_func = function(p) stats::rnorm(p, 0, 1),
   sigma_func = function(p) stats::rchisq(p, 2) + 1
 )
-data_list <- data_gen(n, p, centers, mu, sigma, labels, size, hpara_func)
+data_list <- data_gen(n, p, centers, mu, sigma, labels, size, hparam_func)
 }

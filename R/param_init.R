@@ -3,17 +3,19 @@
 #' @description
 #' `init_hparam( )` gives the initial estimation of parameters Lambda and Sigma.
 #'
-#' @return A list containing a vector of Lambda estimations and a vector of Sigma estimations
-#'
+#' @return A list of values.
+#' \item{hlambda}{optimal initial estimation of Lambda.}
+#' \item{hsigma}{optimal initial estimation of Sigma.}
+#' 
 #' @param X matrix data.
 #' @param centers An integer specifying the number of clusters.
 #' @param labels A vector specifying the cluster labels of the columns of X.
 #' @param tol numerical tolerance of the iteration updates.
 #' @param iter number of iterations.
-#' @param verbose if TRUE, print parameters estimation on each iteration.
-#' @param hlambda estimated heterogeneous parameter Lambda.
-#' @param hsigma estimated heterogeneous parameter Sigma.
-#' @param qalpha estimated distribution of parameter alpha.
+#' @param verbose if TRUE, print iteration information.
+#' @param hlambda heterogeneous parameter vector Lambda.
+#' @param hsigma heterogeneous parameter vector Sigma.
+#' @param qalpha distribution of parameter vector alpha.
 #'
 #' @importFrom RSpectra eigs_sym
 #'
@@ -60,9 +62,6 @@ init_hparam <- function(X, centers, labels,
 }
 
 
-#' @description
-#' `init_hparam0( )` gives the initial estimation of parameters Lambda and Sigma when centers = 1.
-#' @export
 #' @rdname param_init
 init_hparam0 <- function(X, tol, iter, verbose = FALSE) {
   n <- nrow(X)

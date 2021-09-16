@@ -2,6 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 rcpp_hello_world <- function() {
-    .Call('_hbcm_rcpp_hello_world', PACKAGE = 'hbcm')
+    .Call(`_hbcm_rcpp_hello_world`)
+}
+
+rcpp_qalpha_mu_inter <- function(n, p, centers, alpha_mu, alpha_cov) {
+    .Call(`_hbcm_rcpp_qalpha_mu_inter`, n, p, centers, alpha_mu, alpha_cov)
+}
+
+rcpp_qc <- function(n, p, centers, ppi, hsigma, hlambda, alpha_mu, X, alpha_mu_inter) {
+    .Call(`_hbcm_rcpp_qc`, n, p, centers, ppi, hsigma, hlambda, alpha_mu, X, alpha_mu_inter)
 }
 

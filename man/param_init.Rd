@@ -3,16 +3,18 @@
 \name{init_hparam}
 \alias{init_hparam}
 \alias{init_hparam0}
+\alias{init_sigma}
 \alias{obj_init_qalpha}
 \alias{obj_qalpha_logL}
 \alias{obj_init_hlambda}
 \alias{obj_init_hsigma}
-\alias{init_sigma}
 \title{Initial estimation of heterogeneous parameters Lambda and Sigma}
 \usage{
 init_hparam(X, centers, labels, tol, iter, verbose = FALSE)
 
 init_hparam0(X, tol, iter, verbose = FALSE)
+
+init_sigma(X, centers, labels, hlambda, hsigma)
 
 obj_init_qalpha(X, hlambda, hsigma)
 
@@ -21,8 +23,6 @@ obj_qalpha_logL(X, qalpha, hlambda, hsigma)
 obj_init_hlambda(X, qalpha)
 
 obj_init_hsigma(X, qalpha, hlambda)
-
-init_sigma(X, centers, labels, hlambda, hsigma)
 }
 \arguments{
 \item{X}{matrix data.}
@@ -35,21 +35,21 @@ init_sigma(X, centers, labels, hlambda, hsigma)
 
 \item{iter}{number of iterations.}
 
-\item{verbose}{if TRUE, print parameters estimation on each iteration.}
+\item{verbose}{if TRUE, print iteration information.}
 
-\item{hlambda}{estimated heterogeneous parameter Lambda.}
+\item{hlambda}{heterogeneous parameter vector Lambda.}
 
-\item{hsigma}{estimated heterogeneous parameter Sigma.}
+\item{hsigma}{heterogeneous parameter vector Sigma.}
 
-\item{qalpha}{estimated distribution of parameter alpha.}
+\item{qalpha}{distribution of parameter vector alpha.}
 }
 \value{
-A list containing a vector of Lambda estimations and a vector of Sigma estimations
+A list of values.
+\item{hlambda}{optimal initial estimation of Lambda.}
+\item{hsigma}{optimal initial estimation of Sigma.}
 }
 \description{
 `init_hparam( )` gives the initial estimation of parameters Lambda and Sigma.
 
-`init_hparam0( )` gives the initial estimation of parameters Lambda and Sigma when centers = 1.
-
-`init_sigma( )` gives the initial estimation of group-correlation matrix
+`init_sigma( )` gives the initial estimation of group-correlation matrix sigma.
 }

@@ -20,9 +20,45 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_qalpha_mu_inter
+List rcpp_qalpha_mu_inter(int n, int p, int centers, NumericMatrix alpha_mu, NumericMatrix alpha_cov);
+RcppExport SEXP _hbcm_rcpp_qalpha_mu_inter(SEXP nSEXP, SEXP pSEXP, SEXP centersSEXP, SEXP alpha_muSEXP, SEXP alpha_covSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type centers(centersSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type alpha_mu(alpha_muSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type alpha_cov(alpha_covSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_qalpha_mu_inter(n, p, centers, alpha_mu, alpha_cov));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_qc
+NumericMatrix rcpp_qc(int n, int p, int centers, NumericVector ppi, NumericVector hsigma, NumericVector hlambda, NumericMatrix alpha_mu, NumericMatrix X, List alpha_mu_inter);
+RcppExport SEXP _hbcm_rcpp_qc(SEXP nSEXP, SEXP pSEXP, SEXP centersSEXP, SEXP ppiSEXP, SEXP hsigmaSEXP, SEXP hlambdaSEXP, SEXP alpha_muSEXP, SEXP XSEXP, SEXP alpha_mu_interSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type centers(centersSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ppi(ppiSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type hsigma(hsigmaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type hlambda(hlambdaSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type alpha_mu(alpha_muSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< List >::type alpha_mu_inter(alpha_mu_interSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_qc(n, p, centers, ppi, hsigma, hlambda, alpha_mu, X, alpha_mu_inter));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_hbcm_rcpp_hello_world", (DL_FUNC) &_hbcm_rcpp_hello_world, 0},
+    {"_hbcm_rcpp_qalpha_mu_inter", (DL_FUNC) &_hbcm_rcpp_qalpha_mu_inter, 5},
+    {"_hbcm_rcpp_qc", (DL_FUNC) &_hbcm_rcpp_qc, 9},
     {NULL, NULL, 0}
 };
 

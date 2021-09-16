@@ -1,45 +1,49 @@
 #' Estimate the optimal posterior distribution of the data column labels.
 #'
 #' @description
-#' `hbcm( )` gives the optimal posterior distribution of the labels, which can be used
+#' `heterogbcm( )` gives the optimal posterior distribution of the labels, which can be used
 #' to derive the optimal label assignment of the data columns.
 #'
 #' @return A list of values.
 #' \item{sigma}{estimated optimal group-correlation matrix.}
 #' \item{hlambda}{estimated optimal heterogeneous parameter Lambda.}
 #' \item{hsigma}{estimated optimal heterogeneous parameter Sigma.}
-#' \item{obj_logL_val}{-logL after each iteration.}
+#' \item{obj_logL_val}{vector of -logL from each iteration.}
 #' \item{qc}{estimated optimal posterior distribution of the column labels.}
 #'
-#' @rdname optim_vem
-#' 
+#' @rdname cluster_mod
+#'
 #' @param X matrix data.
 #' @param centers An integer specifying the number of clusters.
 #' @param labels A vector specifying the cluster labels of the columns of X.
 #' @param tol numerical tolerance of the iteration updates.
 #' @param iter number of iterations.
-#' @param verbose if TRUE, print parameters estimation on each iteration.
-#' @param hlambda heterogeneous parameter Lambda.
-#' @param hsigma heterogeneous parameter Sigma.
-#' @param qalpha distribution of parameter alpha.
+#' @param iter_init number of iterations of parameters initial estimation, default is 3.
+#' @param verbose if TRUE, print iteration information.
+#' @param hlambda heterogeneous parameter vector Lambda.
+#' @param hsigma heterogeneous parameter vector Sigma.
+#' @param qalpha posterior distribution of parameter vector alpha.
 #' @param ppi probability of multi-nulli distribution.
 #' @param sigma group-correlation matrix.
 #' @param qc posterior distribution of labels.
 #'
 #' @export
-hbcm <- function(X, centers, tol, iter, labels, verbose = FALSE) {
+heterogbcm <- function(X, centers, tol, iter, iter_init = 3, labels, verbose = FALSE) {
   n <- nrow(X)
   p <- ncol(X)
 
   # initial values of hlambda and hsigma
-  init_hparameters <- init_hparam(X, centers, labels, tol, iter = 3, verbose)
+  init_hparameters <- init_hparam(X, centers, labels, tol, iter_init, verbose)
   hlambda <- init_hparameters$hlambda
   hsigma <- init_hparameters$hsigma
 
+  # if centers == 1, sigma, ppi and qc0 are fixed
   if (centers == 1) {
+    
     sigma <- 1
     ppi <- 1
     qc0 <- rep(1, p)
+    
   } else {
 
     # initial estimate of group-correlation matrix sigma
@@ -116,7 +120,7 @@ hbcm <- function(X, centers, tol, iter, labels, verbose = FALSE) {
     qalpha_new <- obj_qalpha(X, centers, sigma_new, qc, hlambda_new, hsigma_new)
 
     min_val <- verbose_print(
-      verbose, "alpha", min_val,
+      verbose, "qalpha", min_val,
       X, centers, ppi_new, sigma_new,
       qc, qalpha_new,
       hlambda_new, hsigma_new
@@ -130,7 +134,7 @@ hbcm <- function(X, centers, tol, iter, labels, verbose = FALSE) {
     )
 
     min_val <- verbose_print(
-      verbose, "ppi", min_val,
+      verbose, "qc", min_val,
       X, centers, ppi_new, sigma_new,
       qc_new, qalpha_new,
       hlambda_new, hsigma_new

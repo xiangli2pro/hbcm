@@ -1,5 +1,5 @@
 
-#' @rdname optim_vem
+#' @rdname cluster_mod
 obj_logL <- function(X, centers, ppi, sigma, qc, qalpha, hlambda, hsigma) {
   n <- nrow(X)
   p <- ncol(X)
