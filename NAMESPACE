@@ -3,6 +3,7 @@
 export(calRand)
 export(data_gen)
 export(heterogbcm)
+export(heterogbcm_test1)
 export(init_hparam)
 export(matchLabel)
 export(rSpecc)
