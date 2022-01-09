@@ -1,6 +1,6 @@
-
+#' log-likelihood function
 #' @rdname cluster_mod
-obj_logL <- function(x, centers, ppi, sigma, qc, qalpha, hlambda, hsigma) {
+obj_logL <- function(x, centers, ppi, omega, qc, qalpha, hlambda, hsigma) {
   n <- nrow(x)
   p <- ncol(x)
 
@@ -21,16 +21,16 @@ obj_logL <- function(x, centers, ppi, sigma, qc, qalpha, hlambda, hsigma) {
 
     entropy_alpha <- -centers / 2 * n * log(2 * pi) - n / 2 * log(det(qalpha$alpha_cov)) - centers / 2 * n
 
-    if (det(sigma) <= 0) {
-      det_sigma <- 1
+    if (det(omega) <= 0) {
+      det_omega <- 1
     } else {
-      det_sigma <- det(sigma)
+      det_omega <- det(omega)
     }
 
     # use vapply to specify the output type
     logL <- sum(t(qc) %*% log(ppi)) +
-      -(n / 2) * centers * log(2 * pi) - n / 2 * log(det_sigma) +
-      -1 / 2 * sum(sapply(qalpha$alpha_mu_inter, function(mu_inter) sum(diag(mu_inter %*% solve(sigma))))) +
+      -(n / 2) * centers * log(2 * pi) - n / 2 * log(det_omega) +
+      -1 / 2 * sum(sapply(qalpha$alpha_mu_inter, function(mu_inter) sum(diag(mu_inter %*% solve(omega))))) +
       -n / 2 * sum(log(2 * pi * hsigma^2)) +
       -1 / 2 * sum((x^2) %*% (1 / (hsigma^2))) +
       -1 / 2 * sum((t(colSums(t(sapply(qalpha$alpha_mu_inter, function(mu_inter) diag(mu_inter))))) %*% qc) * (hlambda^2 / hsigma^2)) +

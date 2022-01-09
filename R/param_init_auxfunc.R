@@ -1,7 +1,7 @@
 #' @rdname param_init
 #' @description
-#' `init_sigma( )` gives the initial estimation of group-correlation matrix sigma.
-init_sigma <- function(x, centers, labels, hlambda, hsigma) {
+#' `init_omega( )` gives the initial estimation of group-correlation matrix omega.
+init_omega <- function(x, centers, labels, hlambda, hsigma) {
   
   n <- nrow(x)
   p <- ncol(x)
@@ -15,20 +15,20 @@ init_sigma <- function(x, centers, labels, hlambda, hsigma) {
     }
   }
   
-  sigma <- matrix(0, centers, centers)
+  omega <- matrix(0, centers, centers)
   hlambda_mat <- hlambda %*% t(hlambda)
   for (k in 1:(centers - 1)) {
     for (l in (k + 1):centers)
     {
-      sigma[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
+      omega[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
     }
   }
   
-  sigma <- sigma + t(sigma)
-  diag(sigma) <- 1
+  omega <- omega + t(omega)
+  diag(omega) <- 1
   
   # return
-  sigma
+  omega
 }
 
 

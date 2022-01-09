@@ -6,13 +6,17 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-hbcm package contains all the necessary functions to conduct cluster
-analysis on network data by using the proposed heterogeneous block
-covariance model (HBCM).
+Heterogeneous block covariance model (HBCM) is a classification model
+used to cluster objects with associations into non-overlapping groups.
+Common application scenarios include: network data where nodes/objects
+are connected and their connections are measured using continuous scale,
+gene expression data where it’s expected to classify genes into groups
+of similar functional roles. The hbcm package contains all the necessary
+functions and dependent packages to conduct the classification.
 
 ## Installation
 
-To the date (09/12/2021) the package is still under development. You can
+To the date (01/08/2022) the package is still under development. You can
 install the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -25,11 +29,12 @@ library('hbcm')
 
 ## Examples
 
-1.  Create a matrix data `x` of dimension `500x500`, with columns
-    belonging to three non-overlapping groups (groups labeled as 1, 2,
-    and 3). `x` values are determined by three things: parameter vector
-    `alpha` (follows multivariate normal distribution), heterogeneous
-    parameters vector `hlambda` and `hsigma`.
+1.  Create a matrix data `x` of dimension `NxP=500x500`, with columns
+    belonging to three (`K=3`) non-overlapping groups (groups labeled as
+    1, 2, and 3). `x` values are determined by three things: parameter
+    vector `alpha` of size `NxK` (follows multivariate normal
+    distribution), heterogeneous parameters vector `hlambda` and
+    `hsigma` of sizes `Px1` respectively.
 
 ``` r
 # check function arguments and return values documentation
@@ -48,15 +53,15 @@ ppi <- rep(1/centers, centers)
 # simulate a vector of labels from the multinulli distribution
 labels <- sample(c(1:centers), size = p, replace = TRUE, prob = ppi) 
 
-# specify the (mu, sigma) of the MVN distribution of alpha
+# specify the (mu, omega) of the MVN distribution of alpha
 mu <- rep(0, centers)
 
 off_diag <- 0.5
-sigma <- diag(rep(1, centers))
+omega <- diag(rep(1, centers))
 for (i in 1:centers) {
   for (j in 1:centers) {
     if (i!=j){
-      sigma[i,j] = off_diag
+      omega[i,j] = off_diag
     } 
   }
 }
@@ -71,7 +76,7 @@ hparam_func <- list(
 size <- 1
 
 # generate data
-data_list <- hbcm::data_gen(n, p, centers, mu, sigma, labels, size, hparam_func)
+data_list <- hbcm::data_gen(n, p, centers, mu, omega, labels, size, hparam_func)
 x <- data_list$x_list[[1]]
 ```
 
@@ -90,17 +95,17 @@ system.time(
 start_labels <- kernlab::specc(abs(cor(x)), centers = 3)@.Data
 )
 #>    user  system elapsed 
-#>   4.157   0.082   4.275
+#>   4.024   0.063   4.123
 
 # use hbcm to perform clustering
 system.time(
-  res <- hbcm::heterogbcm(x, centers = 3, 
+  res <- hbcm::heterogbcm(x, centers = centers, 
                   tol = 1e-3, iter = 100, iter_init = 3, 
                   labels = start_labels, 
                   verbose = FALSE)
 )
 #>    user  system elapsed 
-#>   2.702   0.059   2.892
+#>   3.678   0.047   3.737
 ```
 
 3.  Use metric [Rand-Index](https://en.wikipedia.org/wiki/Rand_index)
@@ -126,10 +131,11 @@ specc_eval <- hbcm::matchLabel(labels, start_labels) %>%
 hbcm_eval <- hbcm::matchLabel(labels, hbcm_labels) %>% 
   unlist() %>% round(3)
 
+# result shows that hbcm model is better than spectral-clustering model in terms of rand index.
 print(specc_eval)
 #>    Rand adjRand 
-#>   0.526   0.075
+#>   0.528   0.063
 print(hbcm_eval)
 #>    Rand adjRand 
-#>   0.788   0.527
+#>   0.840   0.642
 ```

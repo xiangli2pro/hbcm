@@ -1,16 +1,16 @@
 #' Estimate the optimal posterior distribution of the data column labels.
 #'
 #' @description
-#' `heterogbcm_test1( )` gives the optimal posterior distribution of the labels, use random initial values for lambda and sigma
+#' `heterogbcm_expr1( )` gives the optimal posterior distribution of the labels, use random initial values for hlambda and hsigma
 #'
 #' @return A list of values.
-#' \item{sigma}{estimated optimal group-correlation matrix.}
+#' \item{omega}{estimated optimal group-correlation matrix.}
 #' \item{hlambda}{estimated optimal heterogeneous parameter Lambda.}
 #' \item{hsigma}{estimated optimal heterogeneous parameter Sigma.}
 #' \item{obj_logL_val}{vector of -logL from each iteration.}
 #' \item{qc}{estimated optimal posterior distribution of the column labels.}
 #'
-#' @rdname test_functions
+#' @rdname experiment_functions
 #'
 #' @param x a numeric matrix data.
 #' @param centers an integer specifying the number of clusters.
@@ -23,7 +23,7 @@
 
 #'
 #' @export
-heterogbcm_test1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
+heterogbcm_expr1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
                        init_hlambda, init_hsigma) {
   n <- nrow(x)
   p <- ncol(x)
@@ -33,33 +33,33 @@ heterogbcm_test1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
   hlambda <- init_hlambda
   hsigma <- init_hsigma
   
-  # if centers == 1, sigma, ppi and qc0 are fixed
+  # if centers == 1, omega, ppi and qc0 are fixed
   if (centers == 1) {
     
-    sigma <- 1
+    omega <- 1
     ppi <- 1
     qc0 <- rep(1, p)
     
   } else {
     
-    # initial estimate of group-correlation matrix sigma
-    sigma <- init_sigma(x, centers, labels, hlambda, hsigma)
+    # initial estimate of group-correlation matrix omega
+    omega <- init_omega(x, centers, labels, hlambda, hsigma)
     # initial estimate of the probablity of the multi-nulli distribution
     ppi <- table(labels) / p
     # initial distribution of c based on ppi
     qc0 <- sapply(labels, function(grp) grp == c(1:centers)) * 1
   }
   
-  # initial distribution of alpha based on sigma, qc0, hlambda, hsigma
-  qalpha <- obj_qalpha(x, centers, sigma, qc0, hlambda, hsigma)
+  # initial distribution of alpha based on omega, qc0, hlambda, hsigma
+  qalpha <- obj_qalpha(x, centers, omega, qc0, hlambda, hsigma)
   
-  # initial distribution of c based on sigma, qalpha
-  qc <- obj_qc(x, centers, ppi, sigma, qalpha, hlambda, hsigma)
+  # initial distribution of c based on omega, qalpha
+  qc <- obj_qc(x, centers, ppi, omega, qalpha, hlambda, hsigma)
   
   # initial -logL
   obj_logL_val <- vector()
   obj_logL_val[1] <- obj_logL(
-    x, centers, ppi, sigma,
+    x, centers, ppi, omega,
     qc, qalpha,
     hlambda, hsigma
   )
@@ -74,18 +74,18 @@ heterogbcm_test1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
     
     min_val <- verbose_print(
       verbose, "ppi", min_val,
-      x, centers, ppi_new, sigma,
+      x, centers, ppi_new, omega,
       qc, qalpha,
       hlambda, hsigma
     )
     
     
-    # update sigma
-    sigma_new <- obj_sigma(centers, qalpha)
+    # update omega
+    omega_new <- obj_omega(centers, qalpha)
     
     min_val <- verbose_print(
-      verbose, "sigma", min_val,
-      x, centers, ppi_new, sigma_new,
+      verbose, "omega", min_val,
+      x, centers, ppi_new, omega_new,
       qc, qalpha,
       hlambda, hsigma
     )
@@ -96,7 +96,7 @@ heterogbcm_test1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
     
     min_val <- verbose_print(
       verbose, "hlambda", min_val,
-      x, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, omega_new,
       qc, qalpha,
       hlambda_new, hsigma
     )
@@ -107,17 +107,17 @@ heterogbcm_test1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
     
     min_val <- verbose_print(
       verbose, "hsigma", min_val,
-      x, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, omega_new,
       qc, qalpha,
       hlambda_new, hsigma_new
     )
     
     # update qalpha
-    qalpha_new <- obj_qalpha(x, centers, sigma_new, qc, hlambda_new, hsigma_new)
+    qalpha_new <- obj_qalpha(x, centers, omega_new, qc, hlambda_new, hsigma_new)
     
     min_val <- verbose_print(
       verbose, "qalpha", min_val,
-      x, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, omega_new,
       qc, qalpha_new,
       hlambda_new, hsigma_new
     )
@@ -125,19 +125,19 @@ heterogbcm_test1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
     
     # update qc
     qc_new <- obj_qc(
-      x, centers, ppi_new, sigma_new, qalpha_new,
+      x, centers, ppi_new, omega_new, qalpha_new,
       hlambda_new, hsigma_new
     )
     
     min_val <- verbose_print(
       verbose, "qc", min_val,
-      x, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, omega_new,
       qc_new, qalpha_new,
       hlambda_new, hsigma_new
     )
     
     obj_logL_val[iiter + 1] <- obj_logL(
-      x, centers, ppi_new, sigma_new,
+      x, centers, ppi_new, omega_new,
       qc_new, qalpha_new,
       hlambda_new, hsigma_new
     )
@@ -146,7 +146,7 @@ heterogbcm_test1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
     
     iiter <- iiter + 1
     
-    sigma <- sigma_new
+    omega <- omega_new
     hlambda <- hlambda_new
     hsigma <- hsigma_new
     qc <- qc_new
@@ -154,7 +154,7 @@ heterogbcm_test1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
   }
   
   list(
-    sigma = sigma,
+    omega = omega,
     hlambda = hlambda, hsigma = hsigma,
     obj_logL_val = obj_logL_val,
     qc = qc

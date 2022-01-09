@@ -4,7 +4,7 @@
 \alias{data_gen}
 \title{Generate simulation data and parameters}
 \usage{
-data_gen(n, p, centers, mu, sigma, labels, size, hparam_func)
+data_gen(n, p, centers, mu, omega, labels, size, hparam_func)
 }
 \arguments{
 \item{n}{an integer specifying the number of observations (rows) of data x.}
@@ -16,7 +16,7 @@ data_gen(n, p, centers, mu, sigma, labels, size, hparam_func)
 \item{mu}{a vector of size `centers` specifying the mean vector of the 
 multivariate normal distribution of alpha.}
 
-\item{sigma}{a matrix of size `centers x centers` specifying the covariance matrix of the
+\item{omega}{a matrix of size `centers x centers` specifying the covariance matrix of the
 multivariate normal distribution of alpha.}
 
 \item{labels}{a vector of size `p` specifying the cluster labels of the variables.}
@@ -45,11 +45,11 @@ centers <- 3
 mu <- rep(0, centers)
 
 off_diag <- 0.5
-sigma <- diag(rep(1, centers))
+omega <- diag(rep(1, centers))
 for (i in 1:centers) {
  for (j in 1:centers) {
    if (i!=j){
-     sigma[i,j] = off_diag
+     omega[i,j] = off_diag
    } 
  }
 }
@@ -62,5 +62,5 @@ hparam_func <- list(
   lambda_func = function(p) stats::rnorm(p, 0, 1),
   sigma_func = function(p) stats::rchisq(p, 2) + 1
 )
-data_list <- data_gen(n, p, centers, mu, sigma, labels, size, hparam_func)
+data_list <- data_gen(n, p, centers, mu, omega, labels, size, hparam_func)
 }

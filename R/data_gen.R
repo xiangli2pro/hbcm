@@ -15,7 +15,7 @@
 #' @param centers an integer specifying the number of clusters.
 #' @param mu a vector of size `centers` specifying the mean vector of the 
 #' multivariate normal distribution of alpha.
-#' @param sigma a matrix of size `centers x centers` specifying the covariance matrix of the
+#' @param omega a matrix of size `centers x centers` specifying the covariance matrix of the
 #' multivariate normal distribution of alpha.
 #' @param labels a vector of size `p` specifying the cluster labels of the variables.
 #' @param size an integer specifying the number of simulation data sets.
@@ -34,11 +34,11 @@
 #' mu <- rep(0, centers)
 #' 
 #' off_diag <- 0.5
-#' sigma <- diag(rep(1, centers))
+#' omega <- diag(rep(1, centers))
 #' for (i in 1:centers) {
 #'  for (j in 1:centers) {
 #'    if (i!=j){
-#'      sigma[i,j] = off_diag
+#'      omega[i,j] = off_diag
 #'    } 
 #'  }
 #' }
@@ -51,9 +51,9 @@
 #'   lambda_func = function(p) stats::rnorm(p, 0, 1),
 #'   sigma_func = function(p) stats::rchisq(p, 2) + 1
 #' )
-#' data_list <- data_gen(n, p, centers, mu, sigma, labels, size, hparam_func)
-data_gen <- function(n, p, centers, mu, sigma, labels, size, hparam_func) {
-  sample_data <- lapply(1:size, function(k) sample_gen(n, p, mu, sigma, labels, hparam_func))
+#' data_list <- data_gen(n, p, centers, mu, omega, labels, size, hparam_func)
+data_gen <- function(n, p, centers, mu, omega, labels, size, hparam_func) {
+  sample_data <- lapply(1:size, function(k) sample_gen(n, p, mu, omega, labels, hparam_func))
 
   x_list <- lapply(sample_data, function(data) data[["x"]])
   alpha_list <- lapply(sample_data, function(data) data[["alpha"]])
@@ -67,11 +67,11 @@ data_gen <- function(n, p, centers, mu, sigma, labels, size, hparam_func) {
 }
 
 # Helper function
-sample_gen <- function(n, p, mu, sigma, labels, hparam_func) {
+sample_gen <- function(n, p, mu, omega, labels, hparam_func) {
   hlambda <- (hparam_func$lambda_func)(p)
   hsigma <- (hparam_func$sigma_func)(p)
 
-  alpha <- MASS::mvrnorm(n, mu, sigma)
+  alpha <- MASS::mvrnorm(n, mu, omega)
   x <- matrix(rep(0, n * p), nrow = n)
   for (i in 1:n) {
     for (j in 1:p) {

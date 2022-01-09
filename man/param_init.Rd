@@ -3,7 +3,7 @@
 \name{init_hparam}
 \alias{init_hparam}
 \alias{init_hparam0}
-\alias{init_sigma}
+\alias{init_omega}
 \alias{obj_init_qalpha}
 \alias{obj_qalpha_logL}
 \alias{obj_init_hlambda}
@@ -14,7 +14,7 @@ init_hparam(x, centers, labels, tol, iter, verbose = FALSE)
 
 init_hparam0(x, tol, iter, verbose = FALSE)
 
-init_sigma(x, centers, labels, hlambda, hsigma)
+init_omega(x, centers, labels, hlambda, hsigma)
 
 obj_init_qalpha(x, hlambda, hsigma)
 
@@ -51,5 +51,5 @@ A list of values.
 \description{
 `init_hparam( )` gives the initial estimation of parameters Lambda and Sigma.
 
-`init_sigma( )` gives the initial estimation of group-correlation matrix sigma.
+`init_omega( )` gives the initial estimation of group-correlation matrix omega.
 }

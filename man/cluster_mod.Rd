@@ -5,7 +5,7 @@
 \alias{obj_qc}
 \alias{obj_qalpha}
 \alias{obj_ppi}
-\alias{obj_sigma}
+\alias{obj_omega}
 \alias{obj_hlambda}
 \alias{obj_hsigma}
 \alias{obj_logL}
@@ -13,19 +13,19 @@
 \usage{
 heterogbcm(x, centers, tol, iter, iter_init = 3, labels, verbose = FALSE)
 
-obj_qc(x, centers, ppi, sigma, qalpha, hlambda, hsigma)
+obj_qc(x, centers, ppi, omega, qalpha, hlambda, hsigma)
 
-obj_qalpha(x, centers, sigma, qc, hlambda, hsigma)
+obj_qalpha(x, centers, omega, qc, hlambda, hsigma)
 
 obj_ppi(centers, qc)
 
-obj_sigma(centers, qalpha)
+obj_omega(centers, qalpha)
 
 obj_hlambda(x, centers, qc, qalpha)
 
 obj_hsigma(x, centers, qc, qalpha, hlambda)
 
-obj_logL(x, centers, ppi, sigma, qc, qalpha, hlambda, hsigma)
+obj_logL(x, centers, ppi, omega, qc, qalpha, hlambda, hsigma)
 }
 \arguments{
 \item{x}{a numeric matrix data.}
@@ -44,7 +44,7 @@ obj_logL(x, centers, ppi, sigma, qc, qalpha, hlambda, hsigma)
 
 \item{ppi}{probability of multi-nulli distribution.}
 
-\item{sigma}{group-correlation matrix.}
+\item{omega}{group-correlation matrix.}
 
 \item{qalpha}{posterior distribution of parameter vector alpha.}
 
@@ -56,7 +56,7 @@ obj_logL(x, centers, ppi, sigma, qc, qalpha, hlambda, hsigma)
 }
 \value{
 A list of values.
-\item{sigma}{estimated optimal group-correlation matrix.}
+\item{omega}{estimated optimal group-correlation matrix.}
 \item{hlambda}{estimated optimal heterogeneous parameter Lambda.}
 \item{hsigma}{estimated optimal heterogeneous parameter Sigma.}
 \item{obj_logL_val}{vector of -logL from each iteration.}

@@ -1,5 +1,5 @@
 #' @rdname cluster_mod
-obj_qc <- function(x, centers, ppi, sigma, qalpha, hlambda, hsigma) {
+obj_qc <- function(x, centers, ppi, omega, qalpha, hlambda, hsigma) {
   n <- nrow(x)
   p <- ncol(x)
 
@@ -25,7 +25,7 @@ obj_qc <- function(x, centers, ppi, sigma, qalpha, hlambda, hsigma) {
 }
 
 #' @rdname cluster_mod
-obj_qalpha <- function(x, centers, sigma, qc, hlambda, hsigma) {
+obj_qalpha <- function(x, centers, omega, qc, hlambda, hsigma) {
   n <- nrow(x)
   p <- ncol(x)
 
@@ -40,7 +40,7 @@ obj_qalpha <- function(x, centers, sigma, qc, hlambda, hsigma) {
     dsum_j <- diag(c(qc %*% (hlambda^2 / hsigma^2)))
     dbsumi_j <- qc %*% t(x %*% diag((hlambda / hsigma^2)))
 
-    alpha_cov <- Matrix::solve(Matrix::solve(sigma) + dsum_j) # covariance is the same for all i
+    alpha_cov <- Matrix::solve(Matrix::solve(omega) + dsum_j) # covariance is the same for all i
     alpha_mu <- t(alpha_cov %*% dbsumi_j)
     alpha_mu_inter <- rcpp_qalpha_mu_inter(n, p, centers, alpha_mu, alpha_cov)
   }
@@ -63,7 +63,7 @@ obj_ppi <- function(centers, qc) {
 }
 
 #' @rdname cluster_mod
-obj_sigma <- function(centers, qalpha) {
+obj_omega <- function(centers, qalpha) {
   n <- nrow(qalpha$alpha_mu)
   
   if (centers == 1) {
