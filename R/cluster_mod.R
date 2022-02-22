@@ -26,9 +26,13 @@
 #' @param ppi probability of multi-nulli distribution.
 #' @param omega group-correlation matrix.
 #' @param qc posterior distribution of labels.
-#'
+#' @param cluster a vector of integers (from 1:k) indicating the cluster to which each column is allocated.
 #' @export
 heterogbcm <- function(x, centers, tol, iter, iter_init = 3, labels, verbose = FALSE) {
+  
+  # make the data to be matrix
+  x <- as.matrix(x)
+  
   n <- nrow(x)
   p <- ncol(x)
 
@@ -157,11 +161,14 @@ heterogbcm <- function(x, centers, tol, iter, iter_init = 3, labels, verbose = F
     qalpha <- qalpha_new
   }
 
+  cluster <- apply(qc, 2, which.max)
+  
   list(
     omega = omega,
     hlambda = hlambda, hsigma = hsigma,
     obj_logL_val = obj_logL_val,
-    qc = qc
+    qc = qc,
+    cluster = cluster
   )
 }
 

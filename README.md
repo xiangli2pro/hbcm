@@ -16,7 +16,7 @@ functions and dependent packages to conduct the classification.
 
 ## Installation
 
-To the date (01/08/2022) the package is still under development. You can
+To the date (02/22/2022) the package is still under development. You can
 install the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -95,7 +95,7 @@ system.time(
 start_labels <- kernlab::specc(abs(cor(x)), centers = 3)@.Data
 )
 #>    user  system elapsed 
-#>   4.024   0.063   4.123
+#>   4.136   0.076   4.250
 
 # use hbcm to perform clustering
 system.time(
@@ -105,7 +105,7 @@ system.time(
                   verbose = FALSE)
 )
 #>    user  system elapsed 
-#>   3.678   0.047   3.737
+#>   2.792   0.049   2.849
 ```
 
 3.  Use metric [Rand-Index](https://en.wikipedia.org/wiki/Rand_index)
@@ -134,8 +134,8 @@ hbcm_eval <- hbcm::matchLabel(labels, hbcm_labels) %>%
 # result shows that hbcm model is better than spectral-clustering model in terms of rand index.
 print(specc_eval)
 #>    Rand adjRand 
-#>   0.528   0.063
+#>   0.498   0.003
 print(hbcm_eval)
 #>    Rand adjRand 
-#>   0.840   0.642
+#>   0.692   0.308
 ```

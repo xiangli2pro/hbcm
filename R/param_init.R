@@ -42,7 +42,7 @@ init_hparam <- function(x, centers, labels,
     hlambda <- rep(0, p)
     hsigma <- rep(0, p)
 
-    # update parts of hlamba that correspond to different clusters
+    # update parts of hlambda that correspond to different clusters
     for (k in 1:centers)
     {
       result <- init_hparam0(x[, labels == k], tol, iter, verbose = verbose)

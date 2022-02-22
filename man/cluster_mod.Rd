@@ -53,6 +53,8 @@ obj_logL(x, centers, ppi, omega, qc, qalpha, hlambda, hsigma)
 \item{hsigma}{heterogeneous parameter vector Sigma.}
 
 \item{qc}{posterior distribution of labels.}
+
+\item{cluster}{a vector of integers (from 1:k) indicating the cluster to which each column is allocated.}
 }
 \value{
 A list of values.

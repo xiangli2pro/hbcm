@@ -1,5 +1,6 @@
 #' log-likelihood function
 #' @rdname cluster_mod
+#' @export
 obj_logL <- function(x, centers, ppi, omega, qc, qalpha, hlambda, hsigma) {
   n <- nrow(x)
   p <- ncol(x)
