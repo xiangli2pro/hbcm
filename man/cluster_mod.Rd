@@ -53,8 +53,6 @@ obj_logL(x, centers, ppi, omega, qc, qalpha, hlambda, hsigma)
 \item{hsigma}{heterogeneous parameter vector Sigma.}
 
 \item{qc}{posterior distribution of labels.}
-
-\item{cluster}{a vector of integers (from 1:k) indicating the cluster to which each column is allocated.}
 }
 \value{
 A list of values.
@@ -63,6 +61,7 @@ A list of values.
 \item{hsigma}{estimated optimal heterogeneous parameter Sigma.}
 \item{obj_logL_val}{vector of -logL from each iteration.}
 \item{qc}{estimated optimal posterior distribution of the column labels.}
+\item{cluster}{a vector of integers (from 1:k) indicating the cluster to which each column is allocated.}
 }
 \description{
 `heterogbcm( )` gives the optimal posterior distribution of the labels, which can be used

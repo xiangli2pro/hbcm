@@ -10,7 +10,8 @@
 #' \item{hsigma}{estimated optimal heterogeneous parameter Sigma.}
 #' \item{obj_logL_val}{vector of -logL from each iteration.}
 #' \item{qc}{estimated optimal posterior distribution of the column labels.}
-#'
+#' \item{cluster}{a vector of integers (from 1:k) indicating the cluster to which each column is allocated.}
+#' 
 #' @rdname cluster_mod
 #'
 #' @param x a numeric matrix data.
@@ -26,7 +27,6 @@
 #' @param ppi probability of multi-nulli distribution.
 #' @param omega group-correlation matrix.
 #' @param qc posterior distribution of labels.
-#' @param cluster a vector of integers (from 1:k) indicating the cluster to which each column is allocated.
 #' @export
 heterogbcm <- function(x, centers, tol, iter, iter_init = 3, labels, verbose = FALSE) {
   
