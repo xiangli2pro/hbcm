@@ -74,7 +74,9 @@ init_hparam0 <- function(x, tol, iter, verbose = FALSE) {
   hlambda <- eig_max$vectors[, 1] * sqrt(eig_max$values[1])
   
   hsigma <- diag(covx) - diag(hlambda %*% t(hlambda))
-  hsigma[hsigma < 0] <- 0
+  # updated 2022/02/22, hsigma is in the denominator, cannot be 0
+  # hsigma[hsigma < 0] <- 0.1 
+  hsigma <- abs(hsigma)
   hsigma <- sqrt(hsigma)
 
   # minimum of logL after each iteraction sub-step (qalpha, hsigma, hlambda)
@@ -120,26 +122,27 @@ init_hparam0 <- function(x, tol, iter, verbose = FALSE) {
 
 # Helper functions ---------------------------------------------------------------
 
-## calculate the number of pairs that hlambda and hsigma have the same sign
+#' @rdname param_init
+#' @description calculate the number of pairs that hlambda and hsigma have the same sign
 hparam_sign <- function(vec1, vec2) {
   sum((vec1 > 0) & (vec2 > 0)) + sum((vec1 < 0) & (vec2 < 0))
 }
 
-## print iteration info
+#' @rdname param_init
+#' @description print iteration info
 verbose_print_alpha <- function(verbose, param_name, min_val,
                                 x, qalpha, hlambda, hsigma){
   
-  if (verbose == TRUE) {
+  obj_val_new <- obj_qalpha_logL(x, qalpha, hlambda, hsigma) 
+  
+  if (obj_val_new <= min_val) {
     
-    obj_val_new <- obj_qalpha_logL(x, qalpha, hlambda, hsigma) 
+    min_val <- obj_val_new
     
-    if (obj_val_new <= min_val) {
-      
-      min_val <- obj_val_new
-      cat(paste0("Update INIT ", param_name, " : ", obj_val_new, " --"), "\n")
-    } else {
-      cat(paste0("Update INIT ", param_name, " : ", obj_val_new, " ++"), "\n")
-    }
+    if (verbose == TRUE) cat(paste0("Update Initial ", param_name, " : ", obj_val_new, " --"), "\n")
+  } else {
+    
+    if (verbose == TRUE) cat(paste0("Update Initial ", param_name, " : ", obj_val_new, " ++"), "\n")
   }
   
   # return 

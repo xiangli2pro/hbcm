@@ -166,7 +166,7 @@ heterogbcm <- function(x, centers, tol, iter, iter_init = 3, labels, verbose = F
   list(
     omega = omega,
     hlambda = hlambda, hsigma = hsigma,
-    obj_logL_val = obj_logL_val,
+    obj_logL_val = -obj_logL_val, # minimize -> maximize
     qc = qc,
     cluster = cluster
   )
@@ -177,19 +177,18 @@ heterogbcm <- function(x, centers, tol, iter, iter_init = 3, labels, verbose = F
 ## print iteration info
 verbose_print <- function(verbose, param_name, min_val,
                           x, centers, ppi, omega, qc, qalpha, hlambda, hsigma) {
-  if (verbose == TRUE) {
-    obj_logL_val_new <- obj_logL(
-      x, centers, ppi, omega,
-      qc, qalpha,
-      hlambda, hsigma
-    )
-
-    if (obj_logL_val_new <= min_val) {
-      min_val <- obj_logL_val_new
-      cat(paste0("Update ", param_name, " : ", obj_logL_val_new, " --"), "\n")
-    } else {
-      cat(paste0("Update ", param_name, " : ", obj_logL_val_new, " ++"), "\n")
-    }
+  
+  obj_logL_val_new <- obj_logL(
+    x, centers, ppi, omega,
+    qc, qalpha,
+    hlambda, hsigma
+  )
+  
+  if (obj_logL_val_new <= min_val) {
+    min_val <- obj_logL_val_new
+    if (verbose == TRUE) cat(paste0("Update ", param_name, " : ", obj_logL_val_new, " --"), "\n")
+  } else {
+    if (verbose == TRUE) cat(paste0("Update ", param_name, " : ", obj_logL_val_new, " ++"), "\n")
   }
 
   # return

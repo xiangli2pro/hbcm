@@ -1,5 +1,6 @@
 #' log-likelihood function
 #' @rdname cluster_mod
+#' @description `obj_logL` calculates the negative log-likelihood function of data fitted into the HBCM model
 #' @export
 obj_logL <- function(x, centers, ppi, omega, qc, qalpha, hlambda, hsigma) {
   n <- nrow(x)

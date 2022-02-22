@@ -3,6 +3,8 @@
 \name{init_hparam}
 \alias{init_hparam}
 \alias{init_hparam0}
+\alias{hparam_sign}
+\alias{verbose_print_alpha}
 \alias{init_omega}
 \alias{obj_init_qalpha}
 \alias{obj_qalpha_logL}
@@ -13,6 +15,10 @@
 init_hparam(x, centers, labels, tol, iter, verbose = FALSE)
 
 init_hparam0(x, tol, iter, verbose = FALSE)
+
+hparam_sign(vec1, vec2)
+
+verbose_print_alpha(verbose, param_name, min_val, x, qalpha, hlambda, hsigma)
 
 init_omega(x, centers, labels, hlambda, hsigma)
 
@@ -37,11 +43,11 @@ obj_init_hsigma(x, qalpha, hlambda)
 
 \item{verbose}{if TRUE, print iteration information.}
 
+\item{qalpha}{distribution of parameter vector alpha.}
+
 \item{hlambda}{heterogeneous parameter vector Lambda.}
 
 \item{hsigma}{heterogeneous parameter vector Sigma.}
-
-\item{qalpha}{distribution of parameter vector alpha.}
 }
 \value{
 A list of values.
@@ -50,6 +56,10 @@ A list of values.
 }
 \description{
 `init_hparam( )` gives the initial estimation of parameters Lambda and Sigma.
+
+calculate the number of pairs that hlambda and hsigma have the same sign
+
+print iteration info
 
 `init_omega( )` gives the initial estimation of group-correlation matrix omega.
 }

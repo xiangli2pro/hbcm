@@ -1,6 +1,13 @@
 #' @rdname param_init
-#' @description
-#' `init_omega( )` gives the initial estimation of group-correlation matrix omega.
+#' @description `init_omega( )` gives the initial estimation of group-correlation matrix omega.
+#' @export
+#' 
+#' @param x a numeric matrix data.
+#' @param centers an integer specifying the number of clusters.
+#' @param labels a vector specifying the cluster labels of the columns of x.
+#' @param hlambda heterogeneous parameter vector Lambda.
+#' @param hsigma heterogeneous parameter vector Sigma.
+
 init_omega <- function(x, centers, labels, hlambda, hsigma) {
   
   n <- nrow(x)

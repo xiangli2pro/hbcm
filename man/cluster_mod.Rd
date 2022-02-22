@@ -67,4 +67,6 @@ A list of values.
 \description{
 `heterogbcm( )` gives the optimal posterior distribution of the labels, which can be used
 to derive the optimal label assignment of the data columns.
+
+`obj_logL` calculates the negative log-likelihood function of data fitted into the HBCM model
 }
