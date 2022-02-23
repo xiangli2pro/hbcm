@@ -64,14 +64,33 @@ init_hparam <- function(x, centers, labels,
 
 #' @rdname param_init
 init_hparam0 <- function(x, tol, iter, verbose = FALSE) {
+  
+  x <- as.matrix(x)
+  
   n <- nrow(x)
   p <- ncol(x)
   covx <- t(x) %*% x / n
-
+  
+  # if (p <= 2){
+  #   # ??????????????
+  #   # Each cluster needs to have at least 3 objects
+  #   # update 2022/02/22 
+  #   # if there is only 1 column in the cluster, take the constant 
+  #   hlambda = ifelse(p == 1, sd(x), apply(x, 2, sd))
+  #   hsigma = rep(0.1, p)
+  #   
+  # } else {
+  #   
+  # }
+  
   # eig_max is the eigen-pair with largest eigenvalue from covariance matrix of x
   # take eigvector/sqrt(eigenvalue) as the start estimation of hlambda
   eig_max <- RSpectra::eigs_sym(covx - diag(diag(covx)), 1, which = "LM")
-  hlambda <- eig_max$vectors[, 1] * sqrt(eig_max$values[1])
+  # update 2022/02/22
+  # If the eigenvalue less than 0, take it to be 1
+  hlambda <- ifelse(eig_max$values[1] >= 0, 
+                    eig_max$vectors[, 1] * sqrt(eig_max$values[1]),
+                    eig_max$vectors[, 1])
   
   hsigma <- diag(covx) - diag(hlambda %*% t(hlambda))
   # updated 2022/02/22, hsigma is in the denominator, cannot be 0

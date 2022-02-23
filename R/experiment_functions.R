@@ -9,7 +9,8 @@
 #' \item{hsigma}{estimated optimal heterogeneous parameter Sigma.}
 #' \item{obj_logL_val}{vector of -logL from each iteration.}
 #' \item{qc}{estimated optimal posterior distribution of the column labels.}
-#'
+#' \item{cluster}{a vector of integers (from 1:k) indicating the cluster to which each column is allocated.}
+#' 
 #' @rdname experiment_functions
 #'
 #' @param x a numeric matrix data.
@@ -25,6 +26,10 @@
 #' @export
 heterogbcm_expr1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
                        init_hlambda, init_hsigma) {
+  
+  # make the data to be matrix
+  x <- as.matrix(x)
+  
   n <- nrow(x)
   p <- ncol(x)
   
@@ -156,7 +161,8 @@ heterogbcm_expr1 <- function(x, centers, tol, iter, labels, verbose = FALSE,
   list(
     omega = omega,
     hlambda = hlambda, hsigma = hsigma,
-    obj_logL_val = obj_logL_val,
-    qc = qc
+    obj_logL_val = -obj_logL_val, # minimize -> maximize
+    qc = qc,
+    cluster = cluster
   )
 }

@@ -95,7 +95,7 @@ system.time(
 start_labels <- kernlab::specc(abs(cor(x)), centers = 3)@.Data
 )
 #>    user  system elapsed 
-#>   4.030   0.067   4.114
+#>   4.120   0.079   4.241
 
 # use hbcm to perform clustering
 system.time(
@@ -105,7 +105,7 @@ system.time(
                   verbose = FALSE)
 )
 #>    user  system elapsed 
-#>   4.254   0.087   4.354
+#>   4.355   0.080   4.449
 ```
 
 3.  Use metric [Rand-Index](https://en.wikipedia.org/wiki/Rand_index)
@@ -134,8 +134,8 @@ hbcm_eval <- hbcm::matchLabel(labels, hbcm_labels) %>%
 # result shows that hbcm model is better than spectral-clustering model in terms of rand index.
 print(specc_eval)
 #>    Rand adjRand 
-#>   0.524   0.005
+#>   0.550   0.083
 print(hbcm_eval)
 #>    Rand adjRand 
-#>   0.670   0.298
+#>   0.664   0.257
 ```

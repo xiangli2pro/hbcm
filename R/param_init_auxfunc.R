@@ -10,11 +10,12 @@
 
 init_omega <- function(x, centers, labels, hlambda, hsigma) {
   
+  x <- as.matrix(x)
   n <- nrow(x)
   p <- ncol(x)
   
   covx <- t(x) %*% x / n
-  S <- covx - diag(hsigma^2)
+  S <- covx - diag(hsigma^2, nrow = p, ncol = p)
   
   for (i in 1:p) {
     for (j in 1:p) {
@@ -41,6 +42,8 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
 
 #' @rdname param_init
 obj_init_qalpha <- function(x, hlambda, hsigma) {
+  
+  x <- as.matrix(x)
   n <- nrow(x)
   p <- ncol(x)
 
@@ -61,6 +64,8 @@ obj_init_qalpha <- function(x, hlambda, hsigma) {
 
 #' @rdname param_init
 obj_qalpha_logL <- function(x, qalpha, hlambda, hsigma) {
+  
+  x <- as.matrix(x)
   n <- nrow(x)
   p <- ncol(x)
 
@@ -70,9 +75,9 @@ obj_qalpha_logL <- function(x, qalpha, hlambda, hsigma) {
   logL <- -(n / 2) * log(2 * pi) - n / 2 * log(1) +
     -1 / 2 * 1 * sum(qalpha$alpha_mu_inter) +
     -n / 2 * sum(log(2 * pi * (hsigma^2))) +
-    -1 / 2 * sum((x^2) %*% diag(1 / (hsigma^2))) +
+    -1 / 2 * sum((x^2) %*% diag(1 / (hsigma^2), nrow = p, ncol = p)) +
     -1 / 2 * sum(qalpha$alpha_mu_inter) * sum(hlambda^2 / hsigma^2) +
-    sum(diag(c(qalpha$alpha_mu)) %*% x %*% diag(hlambda / hsigma^2)) +
+    sum(diag(c(qalpha$alpha_mu)) %*% x %*% diag(hlambda / hsigma^2, nrow = p, ncol = p)) +
     -entropy_alpha
 
   # return -logL
@@ -81,6 +86,8 @@ obj_qalpha_logL <- function(x, qalpha, hlambda, hsigma) {
 
 #' @rdname param_init
 obj_init_hlambda <- function(x, qalpha) {
+  
+  x <- as.matrix(x)
   n <- nrow(x)
   p <- ncol(x)
 
@@ -90,13 +97,15 @@ obj_init_hlambda <- function(x, qalpha) {
 
 #' @rdname param_init
 obj_init_hsigma <- function(x, qalpha, hlambda) {
+  
+  x <- as.matrix(x)
   n <- nrow(x)
   p <- ncol(x)
 
   # return
   sqrt(1 / n * (colSums(x^2) +
     hlambda^2 * sum(qalpha$alpha_mu_inter) +
-    -2 * colSums(diag(c(qalpha$alpha_mu)) %*% x %*% diag(hlambda))))
+    -2 * colSums(diag(c(qalpha$alpha_mu)) %*% x %*% diag(hlambda, nrow = p, ncol = p))))
 }
 
 

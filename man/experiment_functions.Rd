@@ -39,6 +39,7 @@ A list of values.
 \item{hsigma}{estimated optimal heterogeneous parameter Sigma.}
 \item{obj_logL_val}{vector of -logL from each iteration.}
 \item{qc}{estimated optimal posterior distribution of the column labels.}
+\item{cluster}{a vector of integers (from 1:k) indicating the cluster to which each column is allocated.}
 }
 \description{
 `heterogbcm_expr1( )` gives the optimal posterior distribution of the labels, use random initial values for hlambda and hsigma

@@ -26,6 +26,8 @@ obj_qc <- function(x, centers, ppi, omega, qalpha, hlambda, hsigma) {
 
 #' @rdname cluster_mod
 obj_qalpha <- function(x, centers, omega, qc, hlambda, hsigma) {
+  
+  x <- as.matrix(x)
   n <- nrow(x)
   p <- ncol(x)
 

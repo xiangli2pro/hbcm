@@ -3,6 +3,8 @@
 #' @description `obj_logL` calculates the negative log-likelihood function of data fitted into the HBCM model
 #' @export
 obj_logL <- function(x, centers, ppi, omega, qc, qalpha, hlambda, hsigma) {
+  
+  x <- as.matrix(x)
   n <- nrow(x)
   p <- ncol(x)
 
@@ -23,12 +25,8 @@ obj_logL <- function(x, centers, ppi, omega, qc, qalpha, hlambda, hsigma) {
 
     entropy_alpha <- -centers / 2 * n * log(2 * pi) - n / 2 * log(det(qalpha$alpha_cov)) - centers / 2 * n
 
-    if (det(omega) <= 0) {
-      det_omega <- 1
-    } else {
-      det_omega <- det(omega)
-    }
-
+    det_omega <- ifelse(det(omega) <= 0, 1, det(omega))
+    
     # use vapply to specify the output type
     logL <- sum(t(qc) %*% log(ppi)) +
       -(n / 2) * centers * log(2 * pi) - n / 2 * log(det_omega) +
