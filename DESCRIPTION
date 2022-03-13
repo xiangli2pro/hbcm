@@ -12,6 +12,7 @@ Encoding: UTF-8
 Imports: 
     MASS,
     Matrix,
+    MCMCpack,
     Rcpp,
     RSpectra,
     stats

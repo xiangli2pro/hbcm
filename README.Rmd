@@ -22,7 +22,7 @@ Heterogeneous block covariance model (HBCM) is a classification model used to cl
 
 ## Installation
 
-To the date (02/22/2022) the package is still under development. You can install the development version from [GitHub](https://github.com/) with:
+To the date (03/13/2022) the package is still under development. You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
