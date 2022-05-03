@@ -9,6 +9,7 @@
 #' \item{hlambda}{estimated optimal heterogeneous parameter Lambda.}
 #' \item{hsigma}{estimated optimal heterogeneous parameter Sigma.}
 #' \item{obj_logL_val}{vector of -logL from each iteration.}
+#' \item{qalpha}{estimated optimal posterior distribution of the alpha.}
 #' \item{qc}{estimated optimal posterior distribution of the column labels.}
 #' \item{cluster}{a vector of integers (from 1:k) indicating the cluster to which each column is allocated.}
 #' 
@@ -167,6 +168,7 @@ heterogbcm <- function(x, centers, tol, iter, iter_init = 3, labels, verbose = F
     omega = omega,
     hlambda = hlambda, hsigma = hsigma,
     obj_logL_val = -obj_logL_val, # minimize -> maximize
+    qalpha = qalpha,
     qc = qc,
     cluster = cluster
   )

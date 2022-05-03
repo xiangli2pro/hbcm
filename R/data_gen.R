@@ -25,6 +25,8 @@
 #' @importFrom stats rnorm rchisq
 #' @importFrom MASS mvrnorm
 #'
+#' @rdname simulation_data
+#' 
 #' @export
 #' @examples
 #' n <- 500
@@ -84,3 +86,5 @@ sample_gen <- function(n, p, mu, omega, labels, hparam_func) {
     hlambda = hlambda, hsigma = hsigma
   )
 }
+
+

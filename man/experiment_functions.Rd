@@ -5,6 +5,7 @@
 \alias{heterogbcm_logL}
 \alias{heterogbcm_iterStep}
 \alias{heterogbcm_noInitLabel}
+\alias{heterogbcm_qcDiscrete}
 \title{Estimate the optimal posterior distribution of the data column labels.}
 \usage{
 heterogbcm_hparam(
@@ -37,6 +38,16 @@ heterogbcm_noInitLabel(
   iter,
   iter_init = 3,
   labels = NA,
+  verbose = FALSE
+)
+
+heterogbcm_qcDiscrete(
+  x,
+  centers,
+  tol,
+  iter,
+  iter_init = 3,
+  labels,
   verbose = FALSE
 )
 }
@@ -75,4 +86,6 @@ A list of values.
 first update q2 and parameters Theta, then update q1 and parameters Theta.
 
 `heterogbcm_noInitLabel( )` experiment function with no initial guess of the labels.
+
+`heterogbcm_qcDiscrete( )` experiment function to update qc with discrete values.
 }
