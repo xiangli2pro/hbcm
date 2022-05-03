@@ -1,4 +1,5 @@
 #' @rdname cluster_mod
+#' @export
 obj_qc <- function(x, centers, ppi, omega, qalpha, hlambda, hsigma) {
   n <- nrow(x)
   p <- ncol(x)
@@ -25,6 +26,7 @@ obj_qc <- function(x, centers, ppi, omega, qalpha, hlambda, hsigma) {
 }
 
 #' @rdname cluster_mod
+#' @export
 obj_qalpha <- function(x, centers, omega, qc, hlambda, hsigma) {
   
   x <- as.matrix(x)
@@ -56,6 +58,7 @@ obj_qalpha <- function(x, centers, omega, qc, hlambda, hsigma) {
 }
 
 #' @rdname cluster_mod
+#' @export
 obj_ppi <- function(centers, qc) {
   if (centers == 1) {
     return(1)
@@ -95,6 +98,7 @@ obj_hlambda <- function(x, centers, qc, qalpha) {
 }
 
 #' @rdname cluster_mod
+#' @export
 obj_hsigma <- function(x, centers, qc, qalpha, hlambda) {
   n <- nrow(x)
   p <- ncol(x)
