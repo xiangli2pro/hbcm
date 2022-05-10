@@ -27,14 +27,15 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   S <- S / hlambda_mat
   omega <- matrix(0, centers, centers)
   
-  for (k in 1:(centers - 1)) {
-    for (l in (k + 1):centers)
+  for (k in 1:centers) {
+    # for (l in (k + 1):centers) change on 05/10/2022
+    for (l in k:centers)
     {
       omega[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
     }
   }
   
-  omega <- omega + t(omega)
+  omega <- omega + t(omega) - diag(diag(omega))
   
   # return
   omega
