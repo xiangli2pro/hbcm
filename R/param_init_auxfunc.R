@@ -17,14 +17,16 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   covx <- t(x) %*% x / n
   S <- covx - diag(hsigma^2, nrow = p, ncol = p)
   
-  for (i in 1:p) {
-    for (j in 1:p) {
-      S[i, j] <- S[i, j] / (hlambda[i] * hlambda[j])
-    }
-  }
-  
-  omega <- matrix(0, centers, centers)
+  # for (i in 1:p) {
+  #   for (j in 1:p) {
+  #     S[i, j] <- S[i, j] / (hlambda[i] * hlambda[j])
+  #   }
+  # }
   hlambda_mat <- hlambda %*% t(hlambda)
+  
+  S <- S / hlambda_mat
+  omega <- matrix(0, centers, centers)
+  
   for (k in 1:(centers - 1)) {
     for (l in (k + 1):centers)
     {
@@ -33,7 +35,6 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   }
   
   omega <- omega + t(omega)
-  diag(omega) <- 1
   
   # return
   omega
