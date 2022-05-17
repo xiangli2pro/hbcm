@@ -33,7 +33,7 @@ responding to the same transcription factors are detected.
 
 ## Installation
 
-To the date (03/13/2022) the package is still under development. You can
+To the date (2022-05-17) the package is still under development. You can
 install the development version from [GitHub](https://github.com/) with:
 
 ``` r

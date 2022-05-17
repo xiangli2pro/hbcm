@@ -14,19 +14,29 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   p <- ncol(x)
   
   covx <- t(x) %*% x / n
-  S <- covx - diag(hsigma^2, nrow = p, ncol = p)
+  # S <- covx - diag(hsigma^2, nrow = p, ncol = p)
+  ##??? update 05/17
   
-  # for (i in 1:p) {
-  #   for (j in 1:p) {
-  #     S[i, j] <- S[i, j] / (hlambda[i] * hlambda[j])
-  #   }
-  # }
   hlambda_mat <- hlambda %*% t(hlambda)
-  
   omega <- matrix(0, centers, centers)
+  
+  S <- covx / hlambda_mat
+  
+  for (k in 1:centers) {
+    for (l in k:centers)
+    {
+      omega[k, l] <- mean(S[labels == k, labels == l])
+    }
+  }
+  omega <- omega + t(omega) - diag(diag(omega))
+  
+  
   
   ## old version
   # S <- S / hlambda_mat
+  # # S(i,j) = lambda_i*lambda_j*W_ij
+  # # W_ij = (Xt*X)^(-1)*X*Y
+  # # W_ij = (hlambda*halmbda)^(-1)*halmbda*S
   # for (k in 1:(centers - 1)) {
   #   for (l in (k + 1):centers)
   #   {
@@ -47,14 +57,14 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   # omega <- omega + t(omega) - diag(diag(omega))
   
   # change on 05/17/2022
-  for (k in 1:centers) {
-    for (l in k:centers)
-    {
-      omega[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
-    }
-  }
-  omega <- omega + t(omega) - diag(diag(omega))
-  
+  # for (k in 1:centers) {
+  #   for (l in k:centers)
+  #   {
+  #     omega[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
+  #   }
+  # }
+  # omega <- omega + t(omega) - diag(diag(omega))
+
   # return
   omega
 }

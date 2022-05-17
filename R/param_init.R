@@ -60,6 +60,9 @@ init_hparam <- function(x, centers, labels,
       hlambda[labels == k] <- hlambda_temp
       hsigma[labels == k] <- result$hsigma
     }
+    
+    ## update 05/17
+    hsigma[hsigma == 0] <- 1
   }
 
   list(hsigma = hsigma, hlambda = hlambda)
