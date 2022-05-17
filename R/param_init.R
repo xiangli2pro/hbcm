@@ -16,6 +16,10 @@
 #' @param hlambda heterogeneous parameter vector Lambda.
 #' @param hsigma heterogeneous parameter vector Sigma.
 #' @param qalpha distribution of parameter vector alpha.
+#' @param vec1 a vector of hlambda estimation.
+#' @param vec2 a vector of hlambda estimation.
+#' @param param_name name of the parameter being updated.
+#' @param min_val minimum objective-value being calculated.
 #'
 #' @importFrom RSpectra eigs_sym
 #'

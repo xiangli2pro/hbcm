@@ -3,16 +3,33 @@
 
 # hbcm package
 
+[![Project Status: Active - The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![R build
+status](https://github.com/rossellhayes/ipa/workflows/R-CMD-check/badge.svg)](https://github.com/rossellhayes/ipa/actions)
+
 <!-- badges: start -->
 <!-- badges: end -->
 
-Heterogeneous block covariance model (HBCM) is a classification model
-used to cluster objects with associations into non-overlapping groups.
-Common application scenarios include: network data where nodes/objects
-are connected and their connections are measured using continuous scale,
-gene expression data where it’s expected to classify genes into groups
-of similar functional roles. The hbcm package contains all the necessary
-functions and dependent packages to conduct the classification.
+Community detection is a clustering method based on objects’ pairwise
+relationships such that objects classified in the same group are more
+densely connected than objects from different groups and correlations
+within the same cluster are homogeneous. Most of the model-based
+community detection methods such as the stochastic block model and its
+variants are designed for networks with binary (yes/no) connectivity
+values, which ignores the practical scenarios where the pairwise
+relationships are continuous, reflecting different degrees of
+connectivity. The heterogeneous block covariance model (HBCM) proposes a
+novel clustering structure applicable on signed and continuous
+connections, such as the covariances or correlations between objects.
+Furthermore, it takes into account the heterogeneous property of each
+object within a community. A novel variational EM algorithm is employed
+to estimate the optimal group membership. HBCM has provable consistent
+estimation of clustering memberships and its practical performance is
+demonstrated by numerical simulations. The HBCM is illustrated on yeast
+gene expression data and gene groups with correlated expression levels
+responding to the same transcription factors are detected.
 
 ## Installation
 
@@ -95,7 +112,7 @@ system.time(
 start_labels <- kernlab::specc(abs(cor(x)), centers = 3)@.Data
 )
 #>    user  system elapsed 
-#>   4.399   0.106   4.839
+#>   4.179   0.070   4.272
 
 # use hbcm to perform clustering
 system.time(
@@ -105,7 +122,7 @@ system.time(
                   verbose = FALSE)
 )
 #>    user  system elapsed 
-#>   4.897   0.115   5.033
+#>   3.724   0.094   3.825
 ```
 
 3.  Use metric [Rand-Index](https://en.wikipedia.org/wiki/Rand_index)
@@ -134,8 +151,8 @@ hbcm_eval <- hbcm::matchLabel(labels, hbcm_labels) %>%
 # result shows that hbcm model is better than spectral-clustering model in terms of rand index.
 print(specc_eval)
 #>    Rand adjRand 
-#>   0.543   0.066
+#>   0.540   0.074
 print(hbcm_eval)
 #>    Rand adjRand 
-#>   0.646   0.242
+#>   0.599   0.150
 ```

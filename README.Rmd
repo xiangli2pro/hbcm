@@ -7,18 +7,23 @@ output: github_document
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  message = FALSE,
+  warning = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+library(badger)
 ```
 
 # hbcm package
+`r badge_repostatus("Active")` `r badge_github_actions("rossellhayes/ipa")` 
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-Heterogeneous block covariance model (HBCM) is a classification model used to cluster objects with associations into non-overlapping groups. Common application scenarios include: network data where nodes/objects are connected and their connections are measured using continuous scale, gene expression data where it's expected to classify genes into groups of similar functional roles. The hbcm package contains all the necessary functions and dependent packages to conduct the classification.
+Community detection is a clustering method based on objects’ pairwise relationships such that objects classified in the same group are more densely connected than objects from different groups and correlations within the same cluster are homogeneous.  Most of the model-based community detection methods such as the stochastic block model and its variants are designed for networks with binary (yes/no) connectivity values, which ignores the practical scenarios where the pairwise relationships are continuous, reflecting different degrees of connectivity. The heterogeneous block covariance model (HBCM) proposes a novel clustering structure applicable on signed and continuous connections, such as the covariances or correlations between objects. Furthermore, it takes into account the heterogeneous property of each object within a community. A novel variational EM algorithm is employed to estimate the optimal group membership. HBCM has provable consistent estimation of clustering memberships and its practical performance is demonstrated by numerical simulations. The HBCM is illustrated on yeast gene expression data and gene groups with correlated expression levels responding to the same transcription factors are detected.
 
 ## Installation
 

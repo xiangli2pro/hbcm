@@ -21,7 +21,7 @@
 #' @param verbose if TRUE, print iteration information.
 #' @param init_hlambda initial values for parameter vector Lambda.
 #' @param init_hsigma initial values for parameter vector Sigma.
-
+#' @param iter_init iteration times of initial parameter estimation
 #'
 #' @export
 heterogbcm_hparam <- function(x, centers, tol, iter, labels, verbose = FALSE,

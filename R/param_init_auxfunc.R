@@ -7,7 +7,6 @@
 #' @param labels a vector specifying the cluster labels of the columns of x.
 #' @param hlambda heterogeneous parameter vector Lambda.
 #' @param hsigma heterogeneous parameter vector Sigma.
-
 init_omega <- function(x, centers, labels, hlambda, hsigma) {
   
   x <- as.matrix(x)
@@ -24,17 +23,36 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   # }
   hlambda_mat <- hlambda %*% t(hlambda)
   
-  S <- S / hlambda_mat
   omega <- matrix(0, centers, centers)
   
+  ## old version
+  # S <- S / hlambda_mat
+  # for (k in 1:(centers - 1)) {
+  #   for (l in (k + 1):centers)
+  #   {
+  #     omega[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
+  #   }
+  # }
+  # omega <- omega + t(omega)
+  # diag(omega) <- 1
+  
+  # change on 05/10/2022
+  # S <- S / hlambda_mat
+  # for (k in 1:centers) {
+  #   for (l in k:centers)
+  #   {
+  #     omega[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
+  #   }
+  # }
+  # omega <- omega + t(omega) - diag(diag(omega))
+  
+  # change on 05/17/2022
   for (k in 1:centers) {
-    # for (l in (k + 1):centers) change on 05/10/2022
     for (l in k:centers)
     {
       omega[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
     }
   }
-  
   omega <- omega + t(omega) - diag(diag(omega))
   
   # return

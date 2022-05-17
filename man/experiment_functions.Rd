@@ -67,6 +67,8 @@ heterogbcm_qcDiscrete(
 \item{init_hlambda}{initial values for parameter vector Lambda.}
 
 \item{init_hsigma}{initial values for parameter vector Sigma.}
+
+\item{iter_init}{iteration times of initial parameter estimation}
 }
 \value{
 A list of values.

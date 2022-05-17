@@ -43,6 +43,14 @@ obj_init_hsigma(x, qalpha, hlambda)
 
 \item{verbose}{if TRUE, print iteration information.}
 
+\item{vec1}{a vector of hlambda estimation.}
+
+\item{vec2}{a vector of hlambda estimation.}
+
+\item{param_name}{name of the parameter being updated.}
+
+\item{min_val}{minimum objective-value being calculated.}
+
 \item{qalpha}{distribution of parameter vector alpha.}
 
 \item{hlambda}{heterogeneous parameter vector Lambda.}
