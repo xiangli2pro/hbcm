@@ -30,8 +30,6 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   }
   omega <- omega + t(omega) - diag(diag(omega))
   
-  
-  
   ## old version
   # S <- S / hlambda_mat
   # # S(i,j) = lambda_i*lambda_j*W_ij
@@ -45,16 +43,6 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   # }
   # omega <- omega + t(omega)
   # diag(omega) <- 1
-  
-  # change on 05/10/2022
-  # S <- S / hlambda_mat
-  # for (k in 1:centers) {
-  #   for (l in k:centers)
-  #   {
-  #     omega[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
-  #   }
-  # }
-  # omega <- omega + t(omega) - diag(diag(omega))
   
   # change on 05/17/2022
   # for (k in 1:centers) {

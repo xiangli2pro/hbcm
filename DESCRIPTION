@@ -10,10 +10,13 @@ Description: Package for heterogeneous block covariance model to conduct cluster
 License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: 
+    dplyr,
+    ggplot2,
     MASS,
     Matrix,
     MCMCpack,
     Rcpp,
+    reshape2,
     RSpectra,
     stats
 LinkingTo: Rcpp

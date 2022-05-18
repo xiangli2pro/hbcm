@@ -33,7 +33,7 @@ responding to the same transcription factors are detected.
 
 ## Installation
 
-To the date (2022-05-17) the package is still under development. You can
+To the date (2022-05-18) the package is still under development. You can
 install the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -46,12 +46,14 @@ library('hbcm')
 
 ## Examples
 
-1.  Create a matrix data `x` of dimension `NxP=500x500`, with columns
-    belonging to three (`K=3`) non-overlapping groups (groups labeled as
-    1, 2, and 3). `x` values are determined by three things: parameter
-    vector `alpha` of size `NxK` (follows multivariate normal
-    distribution), heterogeneous parameters vector `hlambda` and
-    `hsigma` of sizes `Px1` respectively.
+### 1. Simulation data
+
+Create a matrix data `x` of dimension `NxP=1000x500`, with columns
+belonging to three (`K=5`) non-overlapping groups (groups labeled as 1
+to 5). `x` values are determined by three things: parameter vector
+`alpha` of size `NxK` (follows multivariate normal distribution),
+heterogeneous parameters vector `hlambda` and `hsigma` of sizes `Px1`
+respectively.
 
 ``` r
 # check function arguments and return values documentation
@@ -64,7 +66,7 @@ n <- 500
 p <- 500
 
 # cluster number
-centers <- 3
+centers <- 5
 # cluster labels follow a multinulli distribution with probability ppi
 ppi <- rep(1/centers, centers)
 # simulate a vector of labels from the multinulli distribution
@@ -97,9 +99,11 @@ data_list <- hbcm::data_gen(n, p, centers, mu, omega, labels, size, hparam_func)
 x <- data_list$x_list[[1]]
 ```
 
-2.  Use heterogeneous block covariance model (HBCM) to cluster the
-    columns of data `x`. Need to provide a starting label guess and the
-    number of clusters.
+### 2. Cluster the columns into `K` groups
+
+Use heterogeneous block covariance model (HBCM) to cluster the columns
+of data `x`. Need to provide a starting label guess and the number of
+clusters.
 
 ``` r
 # check function arguments and return values documentation
@@ -108,27 +112,21 @@ x <- data_list$x_list[[1]]
 
 ``` r
 # use spectral clustering to make a label guess
-system.time(
-start_labels <- kernlab::specc(abs(cor(x)), centers = 3)@.Data
-)
-#>    user  system elapsed 
-#>   4.179   0.070   4.272
+start_labels <- kernlab::specc(abs(cor(x)), centers = centers)@.Data
+
 
 # use hbcm to perform clustering
-system.time(
-  res <- hbcm::heterogbcm(x, centers = centers, 
-                  tol = 1e-3, iter = 100, iter_init = 3, 
-                  labels = start_labels, 
-                  verbose = FALSE)
-)
-#>    user  system elapsed 
-#>   3.724   0.094   3.825
+hbcm_res <- hbcm::heterogbcm(x, centers = centers, 
+                tol = 1e-3, iter = 100, iter_init = 3, 
+                labels = start_labels, 
+                verbose = FALSE)
 ```
 
-3.  Use metric [Rand-Index](https://en.wikipedia.org/wiki/Rand_index)
-    and adjusted Rand-Index to compare the estimated label assignment
-    with the true label assignment. The higher the value, the better the
-    performance.
+### 3. Evaluate the clustering performance
+
+Use metric [Rand-Index](https://en.wikipedia.org/wiki/Rand_index) and
+adjusted Rand-Index to compare the estimated label assignment with the
+true label assignment. The higher the value, the better the performance.
 
 ``` r
 # check function arguments and return values documentation
@@ -136,23 +134,72 @@ system.time(
 ```
 
 ``` r
-# hbcm::heterogbcm() returns the optimal posterior distribution of the latent label variables
-
-# need to first convert distribution to label assignment
-hbcm_labels <- apply(res$qc, 2, which.max)
-
 # evaluate clustering performance
 library('dplyr')
 specc_eval <- hbcm::matchLabel(labels, start_labels) %>% 
   unlist() %>% round(3)
-hbcm_eval <- hbcm::matchLabel(labels, hbcm_labels) %>% 
+hbcm_eval <- hbcm::matchLabel(labels, hbcm_res$cluster) %>% 
   unlist() %>% round(3)
 
 # result shows that hbcm model is better than spectral-clustering model in terms of rand index.
 print(specc_eval)
 #>    Rand adjRand 
-#>   0.540   0.074
+#>   0.614   0.059
 print(hbcm_eval)
 #>    Rand adjRand 
-#>   0.599   0.150
+#>   0.790   0.401
 ```
+
+## Miscellaneous
+
+### 1. Use cross-Validation to select `K` when it’s unknown
+
+In practice the number of clusters is often unknown, in which case we
+recommend to use the cross-validation with adjusted rand index as
+standard to select the `K`. The optimal`K` is achieved at the highest
+adjusted rand index.
+
+``` r
+lapply(c("parallel", "foreach", "doParallel", "tidyverse"), require, char=TRUE)
+#> [[1]]
+#> [1] TRUE
+#> 
+#> [[2]]
+#> [1] TRUE
+#> 
+#> [[3]]
+#> [1] TRUE
+#> 
+#> [[4]]
+#> [1] TRUE
+
+registerDoParallel(detectCores())
+kVec <- c(2:8)
+cv_res <- foreach(K = kVec,.errorhandling = 'pass',
+               .packages = c("MASS","Matrix","matrixcalc","kernlab", "RSpectra")) %dopar%
+  hbcm::crossValid_func_adjR(x, centers = K, pt = 10)
+
+# summary & plot
+data.frame(kVec, unlist(cv_res)) %>% 
+  `colnames<-`(c("K", "adjR")) %>%
+  ggplot() +
+  geom_line(aes(x = K, y = adjR))+
+  xlab("K")+
+  ylab("Average Adjusted Rand Index")+
+  theme_bw() +
+  theme(panel.grid.minor = element_blank()) +
+  scale_x_continuous(breaks =kVec) 
+```
+
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+
+### 2. Use heatmap to display the group structure
+
+``` r
+hbcm::colMat_heatMap(
+  affMatrix = cor(x), centers, labels = hbcm_res$cluster,
+  margin = 0.5, midpoint = 0, limit = c(-1,1), size = 0.2,
+  legendName = "Correlation", title = "HeatMap of correlation by groups")
+```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
