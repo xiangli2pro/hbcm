@@ -49,7 +49,7 @@ library('hbcm')
 ### 1. Simulation data
 
 Create a matrix data `x` of dimension `NxP=1000x500`, with columns
-belonging to three (`K=5`) non-overlapping groups (groups labeled as 1
+belonging to five (`K=5`) non-overlapping groups (groups labeled as 1
 to 5). `x` values are determined by three things: parameter vector
 `alpha` of size `NxK` (follows multivariate normal distribution),
 heterogeneous parameters vector `hlambda` and `hsigma` of sizes `Px1`
@@ -191,7 +191,7 @@ data.frame(kVec, unlist(cv_res)) %>%
   scale_x_continuous(breaks =kVec) 
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="60%" />
 
 ### 2. Use heatmap to display the group structure
 
@@ -202,4 +202,4 @@ hbcm::colMat_heatMap(
   legendName = "Correlation", title = "HeatMap of correlation by groups")
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="60%" />
