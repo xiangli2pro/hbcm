@@ -41,44 +41,16 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   for (k in 1:centers) {
     for (l in k:centers)
     {
-      omega_v2[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
+      omega_v2[k, l] <- mean(S[labels == k, labels == l])
     }
   }
   omega_v2 <- omega_v2 + t(omega_v2) - diag(diag(omega_v2))
-  
-  ## option 3
-  omega_v3 <- matrix(0, centers, centers)
-  S <- (covx - diag(hsigma^2)) / hlambda_mat
-  
-  for (k in 1:centers) {
-    for (l in k:centers)
-    {
-      omega_v3[k, l] <- mean(S[labels == k, labels == l])
-    }
-  }
-  omega_v3 <- omega_v3 + t(omega_v3) - diag(diag(omega_v3))
-  
-  ## option 4
-  omega_v4 <- matrix(0, centers, centers)
-  S <- covx / hlambda_mat
-  
-  for (k in 1:centers) {
-    for (l in k:centers)
-    {
-      omega_v4[k, l] <- mean(S[labels == k, labels == l])
-    }
-  }
-  omega_v4 <- omega_v4 + t(omega_v4) - diag(diag(omega_v4))
 
   # return omega
   if(det(omega_v1) > 0){
     omega <- omega_v1
-  } else if(det(omega_v2) > 0) {
-    omega <- omega_v2
-  } else if(det(omega_v3) > 0) {
-    omega <- omega_v3
   } else {
-    omega <- omega_v4
+    omega <- omega_v2
   }
   
   omega
