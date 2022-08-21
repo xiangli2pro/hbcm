@@ -15,43 +15,53 @@ init_omega <- function(x, centers, labels, hlambda, hsigma) {
   
   covx <- t(x) %*% x / n
   hlambda_mat <- hlambda %*% t(hlambda)
+  S <- covx / hlambda_mat
+  
+  omega <- matrix(0, centers, centers)
+  for (k in 1:centers) {
+    for (l in k:centers)
+    {
+      omega[k, l] <- mean(S[labels == k, labels == l])
+    }
+  }
+  omega <- omega + t(omega) - diag(diag(omega))
   
   ## find the best estimate of omega
   
-  ## option 1
-  omega_v1 <- matrix(0, centers, centers)
-  S <- (covx - diag(hsigma^2)) / hlambda_mat
-  
-  for (k in 1:centers) {
-    for (l in k:centers)
-    {
-      # similar to linear regression
-      # S(i,j) = lambda_i*lambda_j*W_ij
-      # W_ij = (Xt*X)^(-1)*X*Y
-      # W_ij = (hlambda*halmbda)^(-1)*halmbda*S
-      omega_v1[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
-    }
-  }
-  omega_v1 <- omega_v1 + t(omega_v1) - diag(diag(omega_v1))
-  
-  ## option 2
-  omega_v2 <- matrix(0, centers, centers)
-  S <- covx / hlambda_mat
-  
-  for (k in 1:centers) {
-    for (l in k:centers)
-    {
-      omega_v2[k, l] <- mean(S[labels == k, labels == l])
-    }
-  }
-  omega_v2 <- omega_v2 + t(omega_v2) - diag(diag(omega_v2))
-
-  # return omega
-  if(det(omega_v1) > 0){
-    omega <- omega_v1
-  } else {
-    omega <- omega_v2
-  }
+  # ## option 1
+  # omega_v1 <- matrix(0, centers, centers)
+  # S <- (covx - diag(hsigma^2, nrow = p, ncol = p)) / hlambda_mat
+  # 
+  # for (k in 1:centers) {
+  #   for (l in k:centers)
+  #   {
+  #     # similar to linear regression
+  #     # S(i,j) = lambda_i*lambda_j*W_ij
+  #     # W_ij = (Xt*X)^(-1)*X*Y
+  #     # W_ij = (hlambda*halmbda)^(-1)*halmbda*S
+  #     omega_v1[k, l] <- sum(S[labels == k, labels == l] * hlambda_mat[labels == k, labels == l]) / sum(hlambda_mat[labels == k, labels == l]^2)
+  #   }
+  # }
+  # omega_v1 <- omega_v1 + t(omega_v1) - diag(diag(omega_v1))
+  # 
+  # ## option 2
+  # omega_v2 <- matrix(0, centers, centers)
+  # S <- covx / hlambda_mat
+  # 
+  # for (k in 1:centers) {
+  #   for (l in k:centers)
+  #   {
+  #     omega_v2[k, l] <- mean(S[labels == k, labels == l])
+  #   }
+  # }
+  # omega_v2 <- omega_v2 + t(omega_v2) - diag(diag(omega_v2))
+  # 
+  # # return omega
+  # if(det(omega_v1) > 0){
+  #   omega <- omega_v1
+  # } else {
+  #   omega <- omega_v2
+  # }
   
   omega
 }

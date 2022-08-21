@@ -50,6 +50,8 @@ Create a matrix data `x` of dimension `NxP=1000x500`, with columns belonging to 
 ```
 
 ```{r}
+set.seed(2022)
+
 # x dimension
 n <- 500
 p <- 500
