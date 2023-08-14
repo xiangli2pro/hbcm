@@ -2,9 +2,9 @@ Package: hbcm
 Type: Package
 Title: HBCM model for cluster analysis
 Version: 0.0.0.9000
-Date: 2021-09-11
+Date: 2023-08-11
 Author: Xiang Li
-Maintainer: Xiang Li <xiangli@gwmail.gwu.edu>
+Maintainer: Xiang Li <xiangli2pro@gmail.com>
 Description: Package for heterogeneous block covariance model to conduct cluster analysis
     of network data.
 License: MIT + file LICENSE
@@ -20,7 +20,7 @@ Imports:
     RSpectra,
     stats
 LinkingTo: Rcpp
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

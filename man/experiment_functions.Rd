@@ -2,6 +2,7 @@
 % Please edit documentation in R/experiment_functions.R
 \name{heterogbcm_hparam}
 \alias{heterogbcm_hparam}
+\alias{heterogbcm_constant_hlambda_hsigma}
 \alias{heterogbcm_logL}
 \alias{heterogbcm_iterStep}
 \alias{heterogbcm_noInitLabel}
@@ -17,6 +18,16 @@ heterogbcm_hparam(
   verbose = FALSE,
   init_hlambda,
   init_hsigma
+)
+
+heterogbcm_constant_hlambda_hsigma(
+  x,
+  centers,
+  tol,
+  iter,
+  iter_init = 3,
+  labels,
+  verbose = FALSE
 )
 
 heterogbcm_logL(x, centers, tol, iter, iter_init = 3, labels, verbose = FALSE)
@@ -81,6 +92,8 @@ A list of values.
 }
 \description{
 `heterogbcm_hparam( )` gives the optimal posterior distribution of the labels, use random initial values for hlambda and hsigma.
+
+`heterogbcm_constant_hlambda_hsigma( )` experiment function to keep hlambda and hsigma constant across simulation
 
 `heterogbcm_logL( )` experiment function to compare the initial logL and last logL.
 
