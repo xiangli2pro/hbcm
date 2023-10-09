@@ -27,7 +27,7 @@ Community detection is a clustering method based on objects’ pairwise relation
 
 ## Installation
 
-To the date (`r Sys.Date()`) the package is still under development. You can install the development version from [GitHub](https://github.com/) with:
+You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")

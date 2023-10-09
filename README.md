@@ -33,8 +33,7 @@ responding to the same transcription factors are detected.
 
 ## Installation
 
-To the date (2022-05-18) the package is still under development. You can
-install the development version from [GitHub](https://github.com/) with:
+You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
