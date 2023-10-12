@@ -42,7 +42,8 @@ gene_group_uni <- gene_group %>%
 
 
 # ------------ Save data
-data_gene_sample <- gene_sample_uni_t
+# convert character to numeric
+data_gene_sample <- as.data.frame(sapply(gene_sample_uni_t, as.numeric))
 data_gene_group <- gene_group_uni
 usethis::use_data(data_gene_sample, overwrite = TRUE)
 usethis::use_data(data_gene_group, overwrite = TRUE)
