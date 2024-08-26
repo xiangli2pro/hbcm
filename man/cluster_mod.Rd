@@ -2,6 +2,10 @@
 % Please edit documentation in R/cluster_mod.R, R/cluster_param.R, R/obj_logL.R
 \name{heterogbcm}
 \alias{heterogbcm}
+\alias{get_random_qc}
+\alias{get_prob}
+\alias{heterogbcm_prob_qc}
+\alias{heterogbcm_converge_qc}
 \alias{obj_qc}
 \alias{obj_qalpha}
 \alias{obj_ppi}
@@ -12,6 +16,30 @@
 \title{Estimate the optimal posterior distribution of the data column labels.}
 \usage{
 heterogbcm(x, centers, tol, iter, iter_init = 3, labels, verbose = FALSE)
+
+get_random_qc(grp, centers)
+
+get_prob(num_prob, total_prob)
+
+heterogbcm_prob_qc(
+  x,
+  centers,
+  tol,
+  iter,
+  iter_init = 3,
+  labels,
+  verbose = FALSE
+)
+
+heterogbcm_converge_qc(
+  x,
+  centers,
+  tol,
+  iter,
+  iter_init = 3,
+  labels,
+  verbose = FALSE
+)
 
 obj_qc(x, centers, ppi, omega, qalpha, hlambda, hsigma)
 
@@ -67,6 +95,14 @@ A list of values.
 \description{
 `heterogbcm( )` gives the optimal posterior distribution of the labels, which can be used
 to derive the optimal label assignment of the data columns.
+
+`get_random_qc( )` assign initial prob between 0 and 1 to cluster matrix
+
+`get_prob( )` get num_prob with sum equal to total_prob
+
+`heterogbcm_prob_qc( )` set initial distribution of label to be probability rather than discrete value.
+
+`heterogbcm_converge_qc( )` set initial distribution of label to be probability rather than discrete value.
 
 `obj_logL` calculates the negative log-likelihood function of data fitted into the HBCM model
 }
