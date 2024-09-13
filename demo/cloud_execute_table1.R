@@ -19,10 +19,26 @@ size = 100
 
 # ------------ RUN SIMULATION
 # execute simulation for table 1
-# n=500
+# n=500, p=300
 centers <- 3 # number of Classes
 n <- 500  # number of Observations
 p <- 300  # number of Genes
+source(input_dir)
+
+centers <- 5 # number of Classes
+n <- 500  # number of Observations
+p <- 300  # number of Genes
+source(input_dir)
+
+centers <- 7 # number of Classes
+n <- 500  # number of Observations
+p <- 300  # number of Genes
+source(input_dir)
+
+# n=500, p=500
+centers <- 3   # number of Classes
+n <- 500  # number of Observations
+p <- 500  # number of Genes
 source(input_dir)
 
 centers <- 5   # number of Classes
@@ -32,19 +48,67 @@ source(input_dir)
 
 centers <- 7   # number of Classes
 n <- 500  # number of Observations
+p <- 500  # number of Genes
+source(input_dir)
+
+# n=500, p=1000
+centers <- 3   # number of Classes
+n <- 500  # number of Observations
+p <- 1000  # number of Genes
+source(input_dir)
+
+centers <- 5   # number of Classes
+n <- 500  # number of Observations
+p <- 1000  # number of Genes
+source(input_dir)
+
+centers <- 7   # number of Classes
+n <- 500  # number of Observations
 p <- 1000  # number of Genes
 source(input_dir)
 
 
-# n = 1000
+# n = 1000, p=500
 centers <- 3 # number of Classes
 n <- 1000  # number of Observations
 p <- 500  # number of Genes
 source(input_dir)
 
+centers <- 5 # number of Classes
+n <- 1000  # number of Observations
+p <- 500  # number of Genes
+source(input_dir)
+
+centers <- 7 # number of Classes
+n <- 1000  # number of Observations
+p <- 500  # number of Genes
+source(input_dir)
+
+# n = 1000, p=1000
+centers <- 3   # number of Classes
+n <- 1000  # number of Observations
+p <- 1000  # number of Genes
+source(input_dir)
+
 centers <- 5   # number of Classes
 n <- 1000  # number of Observations
 p <- 1000  # number of Genes
+source(input_dir)
+
+centers <- 7   # number of Classes
+n <- 1000  # number of Observations
+p <- 1000  # number of Genes
+source(input_dir)
+
+# n = 1000, p=1500
+centers <- 3   # number of Classes
+n <- 1000  # number of Observations
+p <- 1500  # number of Genes
+source(input_dir)
+
+centers <- 5   # number of Classes
+n <- 1000  # number of Observations
+p <- 1500  # number of Genes
 source(input_dir)
 
 centers <- 7   # number of Classes
