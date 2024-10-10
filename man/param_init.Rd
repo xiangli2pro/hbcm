@@ -5,6 +5,8 @@
 \alias{init_hparam0}
 \alias{hparam_sign}
 \alias{verbose_print_alpha}
+\alias{init_hparam0_fix_hlambda}
+\alias{init_hparam_fix_hlambda}
 \alias{init_omega}
 \alias{obj_init_qalpha}
 \alias{obj_qalpha_logL}
@@ -19,6 +21,18 @@ init_hparam0(x, tol, iter, verbose = FALSE)
 hparam_sign(vec1, vec2)
 
 verbose_print_alpha(verbose, param_name, min_val, x, qalpha, hlambda, hsigma)
+
+init_hparam0_fix_hlambda(x, tol, iter, verbose = FALSE, hlambda)
+
+init_hparam_fix_hlambda(
+  x,
+  centers,
+  labels,
+  tol,
+  iter,
+  verbose = FALSE,
+  hlambda
+)
 
 init_omega(x, centers, labels, hlambda, hsigma)
 
