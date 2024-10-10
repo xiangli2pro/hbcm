@@ -128,16 +128,20 @@ crossValid_func_adjR <- function(x, centers, pt){
     x_valid <- x[-idx,]
     
     spec_test <- rSpecc(abs(cov(x_test)), centers = centers)$.Data
-    hbcm_test <- hbcm::heterogbcm(scale(x_test, center = TRUE, scale = FALSE),
+    hbcm_test <- hbcm::heterogbcm_converge_qc(scale(x_test, center = TRUE, scale = FALSE),
                                   centers = centers,
-                                  tol = 1e-3, iter = 100, iter_init = 3,
+                                  tol = 1e-3, 
+                                  iter = 200, 
+                                  iter_init = 3,
                                   labels = spec_test,
                                   verbose = FALSE)
     
     spec_valid <- rSpecc(abs(cov(x_valid)), centers = centers)$.Data
-    hbcm_valid <- hbcm::heterogbcm(scale(x_valid, center = TRUE, scale = FALSE),
+    hbcm_valid <- hbcm::heterogbcm_converge_qc(scale(x_valid, center = TRUE, scale = FALSE),
                                    centers = centers,
-                                   tol = 1e-3, iter = 100, iter_init = 3,
+                                   tol = 1e-3, 
+                                   iter = 200, 
+                                   iter_init = 3,
                                    labels = spec_valid,
                                    verbose = FALSE)
     
