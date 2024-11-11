@@ -1,6 +1,13 @@
+#################################################################################################
+## Manuscript: Community Detection with Heterogeneous Block Covariance Model
+## Examples for WGCNA simulation
+#################################################################################################
+
+
 #************************** setup environment
 library(devtools)
-load_all()
+devtools::install_github("xiangli2pro/hbcm")
+# load_all()
 packages <- c("hbcm", "parallel", "foreach", "doParallel", "kernlab", "matrixcalc")
 lapply(packages, require, char=TRUE)
 output_dir = '/Users/xiangli/Downloads/hbcm_jcgs_revise/simulation/final/data/' 
@@ -88,12 +95,12 @@ run_time_hbcm <- difftime(end, start, units="mins")
 
 #************************** WGCNA
 # # download packages
-# install.packages("WGCNA")
 # install.packages("BiocManager")
 # BiocManager::install("GO.db")
 # BiocManager::install("impute")
 # BiocManager::install("preprocessCore")
 # BiocManager::install("DESeq2")
+# install.packages("WGCNA")
 library(WGCNA)
 
 wgcna_power6_size10_cut0.6 = list()

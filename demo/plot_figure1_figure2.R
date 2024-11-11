@@ -73,9 +73,9 @@ plot_hsigma <- df_f1_left %>%
   theme_bw() +
   theme(
     panel.grid.major = element_blank(),
-    legend.position = ""
+    # legend.position = ""
   ) +
-  xlab(expression(paste("Heterogeneous ", sigma))) +
+  xlab(expression(sigma)) +
   ylab("Adjusted Rand Index") +
   annotate("text",
            x = 2.5, y = c(0.6, 0.55, 0.50),
@@ -86,7 +86,8 @@ plot_hsigma <- df_f1_left %>%
            ),
            size = 3, hjust = 0
   )
-
+ggsave(paste0(output_dir, "figure1_sigma.eps"), dpi = 600)
+ggsave(paste0(output_dir, "figure1_sigma.png"), dpi = 600)
 
 # make manuscript Figure 1 (middle)
 plot_omega <- df_f1_middle %>%
@@ -99,7 +100,7 @@ plot_omega <- df_f1_middle %>%
   theme_bw() +
   theme(
     panel.grid.major = element_blank(),
-    legend.position = ""
+    # legend.position = ""
   ) +
   xlab(expression(paste(Omega, " off-diagonal"))) +
   ylab("") +
@@ -113,7 +114,8 @@ plot_omega <- df_f1_middle %>%
            size = 3, hjust = 0
   ) +
   scale_x_continuous(breaks = seq(0.1, 0.9, by = 0.2))
-
+ggsave(paste0(output_dir, "figure1_omega.eps"), dpi = 600)
+ggsave(paste0(output_dir, "figure1_omega.png"), dpi = 600)
 
 # make manuscript Figure 1 (right)
 # make plot
@@ -147,7 +149,8 @@ plot_t <- cbind(df_f1_right, df_f1_right_corrected[, -1]) %>%
            ),
            size = 3, hjust = 0
   )
-
+ggsave(paste0(output_dir, "figure1_t_df.eps"), dpi = 600)
+ggsave(paste0(output_dir, "figure1_t_df.png"), dpi = 600)
 
 # combine plots to a single plot
 
@@ -180,7 +183,7 @@ plot_f2 <-  df_f2%>%
   ) +
   theme_bw() +
   theme(panel.grid.major = element_blank()) +
-  xlab(expression(paste("Heterogeneous ", sigma))) +
+  xlab(expression(paste(sigma))) +
   ylab("Adjusted Rand Index") +
   ylim(c(0, 1)) +
   annotate("text",

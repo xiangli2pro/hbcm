@@ -38,7 +38,7 @@ plot_hsigma <- df %>%
     panel.grid.major = element_blank()
     # , legend.position = ""
   ) +
-  xlab(expression(paste("Mis-specification of Within Cluster Heterogeneous Variance"))) +
+  xlab(expression(sigma)) +
   ylab("Adjusted Rand Index") 
 
 plot_hsigma

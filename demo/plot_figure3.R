@@ -97,8 +97,8 @@ pSim
 # save data
 load(paste0(output_dir, "data/figure3_sim.rda"))
 save(true_labels, data_list, cv_data, pSim, file = paste0(output_dir, "data/figure3_sim.rda"))
-ggsave(paste0(output_dir, "plot/figure3_sim.png"), dpi = 600)
-ggsave(paste0(output_dir, "plot/figure3_sim.eps"), dpi = 600)
+ggsave(paste0(output_dir, "plot/figure3_sim_submit.png"), dpi = 600)
+ggsave(paste0(output_dir, "plot/figure3_sim_submit.eps"), dpi = 600)
 
 #************************** Use cross-validation to identify cluster number K in gene expression data
 

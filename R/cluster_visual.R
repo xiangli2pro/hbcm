@@ -83,7 +83,7 @@ colMat_heatMap <- function(affMatrix, centers, labels,
   matReorder %>%
     reshape2::melt(na.rm = TRUE) %>%
     ggplot2::ggplot(ggplot2::aes(x=Var1, y=Var2, fill=value)) +
-    ggplot2::geom_tile(color = "white")+
+    ggplot2::geom_tile()+
     ggplot2::scale_fill_gradient2(low = "blue", high = "red",
                          midpoint = midpoint, limit = limit, space = "Lab",
                          name=legendName) +
@@ -127,7 +127,7 @@ crossValid_func_adjR <- function(x, centers, pt){
     x_test <- x[idx,]
     x_valid <- x[-idx,]
     
-    spec_test <- rSpecc(abs(cov(x_test)), centers = centers)$.Data
+    spec_test <- rSpecc(abs(cor(x_test)), centers = centers)$.Data
     hbcm_test <- hbcm::heterogbcm_converge_qc(scale(x_test, center = TRUE, scale = FALSE),
                                   centers = centers,
                                   tol = 1e-3, 
@@ -136,7 +136,7 @@ crossValid_func_adjR <- function(x, centers, pt){
                                   labels = spec_test,
                                   verbose = FALSE)
     
-    spec_valid <- rSpecc(abs(cov(x_valid)), centers = centers)$.Data
+    spec_valid <- rSpecc(abs(cor(x_valid)), centers = centers)$.Data
     hbcm_valid <- hbcm::heterogbcm_converge_qc(scale(x_valid, center = TRUE, scale = FALSE),
                                    centers = centers,
                                    tol = 1e-3, 
